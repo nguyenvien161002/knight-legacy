@@ -68,9 +68,10 @@ button {
     .form {
         width: 500px;
         min-height: 100px;
+        color: #fff;
         padding: 32px 24px;
         text-align: center;
-        background: #fff;
+        // background: #fff;
         border-radius: 2px;
         margin: 24px;
         align-self: center;
@@ -109,20 +110,29 @@ button {
         }
           
         .form-control {
-            height: 53px;
-            padding: 8px 12px;
-            border: 1px solid #b3b3b3;
-            border-radius: 3px;
-            outline: none;
-            font-size: 1.8rem;
+            padding:6px 8px;
+            background: transparent;
+            border: none;
+            color: #fff;
+            option {
+                background:  rgb(19,17,41);;
+            }
         }
           
+        .form-control:focus {
+            border: none;
+            outline: none;
+            border-bottom: 1px solid #1dbfaf;
+
+        }
         .form-control:hover {
             border-color: #1dbfaf;
         }
         .form-submit {
             outline: none;
-            background-image: linear-gradient(to right, #e713b5, #c30185);;
+            background-image: linear-gradient(to right, #ed6ea0, #ec8c69, #f7186a , #FBB03B);
+            box-shadow: 0 4px 15px 0 rgba(236, 116, 149, 0.75);
+            background-size: 300% 100%;
             margin-top: 12px;
             padding: 12px 16px;
             font-weight: 600;
@@ -131,12 +141,25 @@ button {
             width: 100%;
             font-size: 14px;
             border-radius: 8px;
+            transition: all .4s ease-in-out;
+            moz-transition: all .4s ease-in-out;
+            -o-transition: all .4s ease-in-out;
+            -webkit-transition: all .4s ease-in-out;
             cursor: pointer;
+        }
+        .form-submit:hover {
+            background-position: 100% 0;
+           
+
         }
     }
 }
 .content-modal {
+    border: none;
     font-size: 2rem;
+}
+.modal-body {
+    background:  rgb(19,17,41);
 }
 .content {
     flex-basis: 70%;

@@ -1,5 +1,5 @@
 
-import './GlobalStyle.module.scss';
+import './GlobalStyle.scss';
 
   
 export default function GlobalStyle({children} :any) {
