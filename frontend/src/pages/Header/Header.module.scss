@@ -74,12 +74,16 @@
                 margin-left: 8px;
                 color: rgb(169,196,238);
             }
+            a {
+                color: white;
+                text-decoration: none;
+            }
         }
         .menu__button {
-            line-height: 80px;
             position: relative;
+            top: 16px;
             &:hover .disconnect__btn {
-                top: 70px;
+                top: 58px;
             }
             &:hover .down-icon {
                 transform: rotate(-180deg);
@@ -110,7 +114,7 @@
             .disconnect__btn {
                 transition: all 0.3s ease;
                 position: absolute;
-                top: 18px;
+                top: 1px;
                 padding: 8px 20px;
                 right: 0px;
                 z-index: -1;
