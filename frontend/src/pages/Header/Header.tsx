@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp ,IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import { faAngleDown} from '@fortawesome/free-solid-svg-icons'; 
 import Web3 from 'web3';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import style from './Header.module.scss';
 const cx = classNames.bind(style);
@@ -21,7 +22,6 @@ function Header() {
       const wallet = localStorage.getItem('wallet') ?? "";
       return wallet;
     })
-    
     function ellipsisAddress(address: string) {
         if(address){
         const addressToArray = address.split('');
@@ -78,22 +78,17 @@ function Header() {
         };
       }
     }, [provider]);
-    // hook to automatically connect to the cached provider
+    //hook to automatically connect to the cached provider
     useEffect(() => {
       if (web3Modal.cachedProvider) {
         connectWallet();
       }
     }, []);
-
-    useEffect(() => {
-      connectWallet();
-    }, [])
-
     return (
         <header className={cx('header')}>
             <div className={cx('header__item-left')}>
-                <h2>Knight's</h2>
-                <h3>Legacy NFTs</h3>
+                <h2>Knight</h2>
+                <h3>NFTs</h3>
             </div>
             <div className={cx('header__item-center')}>
                 <div className={cx("group__input")}>
@@ -102,10 +97,18 @@ function Header() {
             </div>
             <div className={cx('header__item-right')}>
                 <ul>
-                    <li className={cx('menu__item')}>Home</li>
-                    <li className={cx('menu__item')}>Explore <FontAwesomeIcon className={cx('menu__item-ic')}   icon={faAnngleIC} /></li>
-                    <li className={cx('menu__item')}>Author <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></li>
-                    <li className={cx('menu__item')}>Stats <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></li>
+                    <li className={cx('menu__item')}>
+                      <Link to={'/'}> Home</Link>
+                    </li>
+                    <li className={cx('menu__item')}>
+                      <Link to={'/explore'}> Explore <FontAwesomeIcon className={cx('menu__item-ic')}   icon={faAnngleIC} /></Link>
+                    </li>
+                    <li className={cx('menu__item')}>
+                      <Link to={'/profile'}> Profile <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
+                    </li>
+                    <li className={cx('menu__item')}>
+                      <Link to={'/stats'}> Stats <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
+                    </li>
                 </ul>
                 <div className={cx('menu__button')} id="btn_connect-wallte">
                    <div>

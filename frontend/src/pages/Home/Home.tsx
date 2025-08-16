@@ -24,7 +24,6 @@ import liang from '../../assets/images/liang.png';
 import liang1 from '../../assets/images/liang-3.png';
 import liang2 from '../../assets/images/liang-2.png';
 import Header from '../Header/Header';
-import ABI_KnightNFT from '../../utility/ABI_KnightNFT.json';
 const cx = classNames.bind(style);
 const faHeartIC = faHeart as IconDefinition;
 const faArrowRightIC = faArrowRight as IconDefinition;
@@ -32,7 +31,6 @@ const faUserCircleIC = faUserCircle as IconDefinition;
 const faCloudUploadIC = faCloudUpload as IconDefinition;
 const faShoppingCartIC = faShoppingCart as IconDefinition;
 function Home() {
-    console.log(ABI_KnightNFT);
     useEffect(() => {
         setTimeout(() => {
             const banner__right = document.getElementById("banner__right_img");
@@ -51,7 +49,12 @@ function Home() {
         }, 500);
     }, [])
 
+    const createKnight = () => {
 
+    }
+    const getKnight = () => {
+
+    }
     return <div className={cx('home')}>
         <Header/>
         <div className={cx('banner')}>
@@ -60,14 +63,14 @@ function Home() {
             </div>
             <div className={cx('banner__center')} id="banner__center">
                 <h1> GET BEST GAMING<br/> CHARACTER AND <br/>COLLECT NFT</h1>
-                <button> Explore </button>
+                <button onClick={getKnight}> Explore </button>
                 <a href="#"> Create Account</a>
             </div>
             <div className={cx('banner__left')} >
                 <img src={banner__left} alt="" id="banner__left"/>
             </div>
             <div className={cx('banner__bottom-right')} id="banner__bottom-right">
-                <div className={cx('banner__bottom-item')}  style={{ "--t": 1 } as React.CSSProperties} >400K <br/> Author</div>
+                <div className={cx('banner__bottom-item')}  style={{ "--t": 1 } as React.CSSProperties}>400K <br/> Author</div>
                 <div className={cx('banner__bottom-item')}  style={{ "--t": 2 } as React.CSSProperties}>50k <br/> Auction </div>
                 <div className={cx('banner__bottom-item')}  style={{ "--t": 3 } as React.CSSProperties}>100K <br/> Member</div>
                 <div className={cx('banner__bottom-item')}  style={{ "--t": 4 } as React.CSSProperties}>10+ <br/> Token</div>
