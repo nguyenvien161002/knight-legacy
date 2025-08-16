@@ -60,8 +60,9 @@ function DefaultLayout() {
                 </div>
               </div>
           </header>
+          <Outlet></Outlet>
        </div>
-      <Outlet></Outlet>
+    
     </section>
   );
 }
