@@ -2,7 +2,7 @@ import { Outlet, Link } from "react-router-dom";
 import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
-import { faAngleDown, faStore, faCreditCard, faChartLine, faHistory, faHomeLg, faCog, faSignOut, faSearch} from '@fortawesome/free-solid-svg-icons'; 
+import { faAngleDown, faStore, faCreditCard, faChartLine, faHistory, faHomeLg, faCog, faSignOut, faSearch, faHammer} from '@fortawesome/free-solid-svg-icons'; 
 import { faBell } from "@fortawesome/free-regular-svg-icons";
 import yi from '../../../assets/images/yi.png';
 import logo from '../../../assets/images/logo-dashboard.png';
@@ -19,6 +19,8 @@ const faHistoryIC = faHistory as IconDefinition;
 const faCogIC = faCog as IconDefinition;
 const faSignOutIC = faSignOut as IconDefinition;
 const faSearchIC = faSearch as IconDefinition;
+const faHammerIC = faHammer as IconDefinition;
+
 function DefaultLayout() {
 
   const [account, setAccount] = useState<string>(() => {
@@ -50,6 +52,7 @@ function DefaultLayout() {
               <li className={cx(["list__item"])}> <Link to={"/store"}> <FontAwesomeIcon className={cx('store')}   icon={faCreditCardIC} /> </Link> </li>
               <li className={cx(["list__item"])}> <Link to={"/store"}> <FontAwesomeIcon className={cx('store')}   icon={faChartLineIC} /> </Link> </li>
               <li className={cx(["list__item"])}> <Link to={"/store"}> <FontAwesomeIcon className={cx('store')}   icon={faHistoryIC} /> </Link> </li>
+              <li className={cx(["list__item"])}> <Link to={"/attack"}> <FontAwesomeIcon className={cx('store')}   icon={faHammerIC} /> </Link> </li>
             </ul>
           </div>
           <div className={cx("action")}>
