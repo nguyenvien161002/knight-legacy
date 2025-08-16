@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import style from "./ListKnight.module.scss";
 import ahir from "../../../assets/images/ahir-png.png";
+
 import classNames from "classnames/bind";
 
 const cx = classNames.bind(style);
@@ -30,7 +31,7 @@ const TimeDown = (props :any) => {
   useEffect(() => {
     let IDtime =  setInterval(()=>{
       let now = Math.floor(new Date().getTime()/1000);
-      let D = parseInt(props.time) + 86400 - now ;
+      let D = (parseInt(props.time) + 86400 - now) < 0 ? 0 : parseInt(props.time) + 86400 - now ;
       let days = Math.floor(D/(60*60*24));
       let hours = Math.floor(D/(60*60));
       let minutes = Math.floor(D/(60));
@@ -39,8 +40,6 @@ const TimeDown = (props :any) => {
       hours %= 24;
       minutes %= 60;
       seconds %= 60;
-      
-      console.log(seconds , D)
       setCoolDown({
         days,
         hours,
@@ -64,7 +63,6 @@ const TimeDown = (props :any) => {
 }
 
 const ListKnight = ({ data }: Props) => {
-  console.log(data);
   return (
     <div className={cx("card-container")}>
       {data?.map((knight) => {
