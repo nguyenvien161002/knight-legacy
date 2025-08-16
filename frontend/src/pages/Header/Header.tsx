@@ -8,20 +8,21 @@ import Web3 from 'web3';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import style from './Header.module.scss';
+import { upload } from '../../redux/walletReducer';
+import { useAppDispatch, useAppSelector } from "../../redux/hook";
+
 const cx = classNames.bind(style);
 const faAnngleIC = faAngleDown as IconDefinition;
+
 function Header() {
     const web3Modal = new Web3Modal({
-      cacheProvider: true, // reload still connect
+      cacheProvider: true,
       providerOptions:{}
     });
-    
+    const wallet = useAppSelector(state => state.wallet.value)
+    const dispatch = useAppDispatch();
     const [provider, setProvider] = useState<any>()
     const [library, setLibrary] = useState<any>();
-    const [account, setAccount] = useState<string>(() => {
-      const wallet = localStorage.getItem('wallet') ?? "";
-      return wallet;
-    })
     function ellipsisAddress(address: string) {
         if(address){
         const addressToArray = address.split('');
@@ -41,7 +42,7 @@ function Header() {
         setProvider(provider);
         setLibrary(library);
         if (accounts) {
-          setAccount(accounts[0]);
+          dispatch(upload(accounts[0]));
           localStorage.setItem('wallet', accounts[0]);
         };
       } catch (error) {
@@ -49,7 +50,7 @@ function Header() {
       }
     };
     const refreshState = () => {
-      setAccount("");
+      dispatch(upload(""));
       localStorage.removeItem('wallet');
     };
     const disconnect = async () => {
@@ -59,7 +60,7 @@ function Header() {
     useEffect(() => {
       if (provider?.on) {
         const handleAccountsChanged = (accounts:any) => {
-          setAccount(accounts[0]);
+          dispatch(upload(accounts[0]));
           localStorage.setItem('wallet', accounts[0]);
         };
     
@@ -112,8 +113,8 @@ function Header() {
                 </ul>
                 <div className={cx('menu__button')} id="btn_connect-wallte">
                    <div>
-                    {account ?<button  onClick={connectWallet}>{ellipsisAddress(account)} <FontAwesomeIcon className={cx('down-icon')} icon={faAnngleIC} /> </button>  : <button  onClick={connectWallet}>Connect Wallet</button>  }
-                    { account ? <button  onClick={disconnect} className={cx('disconnect__btn')} >{"Disconnect"}</button> : ''}
+                    {wallet ?<button  onClick={connectWallet}>{ellipsisAddress(wallet)} <FontAwesomeIcon className={cx('down-icon')} icon={faAnngleIC} /> </button>  : <button  onClick={connectWallet}>Connect Wallet</button>  }
+                    { wallet ? <button  onClick={disconnect} className={cx('disconnect__btn')} >{"Disconnect"}</button> : ''}
                    </div>
                 </div>
             </div>
