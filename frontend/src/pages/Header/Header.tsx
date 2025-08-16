@@ -92,8 +92,8 @@ function Header() {
     return (
         <header className={cx('header')}>
             <div className={cx('header__item-left')}>
-                <h2>Knight's</h2>
-                <h3>Legacy NFTs</h3>
+                <h2>Knight</h2>
+                <h3>NFTs</h3>
             </div>
             <div className={cx('header__item-center')}>
                 <div className={cx("group__input")}>
@@ -109,7 +109,7 @@ function Header() {
                       <Link to={'/explore'}> Explore <FontAwesomeIcon className={cx('menu__item-ic')}   icon={faAnngleIC} /></Link>
                     </li>
                     <li className={cx('menu__item')}>
-                      <Link to={'/author'}> Author <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
+                      <Link to={'/profile'}> Profile <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
                     </li>
                     <li className={cx('menu__item')}>
                       <Link to={'/stats'}> Stats <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
