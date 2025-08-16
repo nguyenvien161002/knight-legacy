@@ -78,17 +78,12 @@ function Header() {
         };
       }
     }, [provider]);
-    // hook to automatically connect to the cached provider
+    //hook to automatically connect to the cached provider
     useEffect(() => {
       if (web3Modal.cachedProvider) {
         connectWallet();
       }
     }, []);
-
-    useEffect(() => {
-      connectWallet();
-    }, [])
-
     return (
         <header className={cx('header')}>
             <div className={cx('header__item-left')}>
