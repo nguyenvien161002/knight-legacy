@@ -134,34 +134,8 @@
         cursor: pointer;
         transition: all 0.3s ease-in-out;
         position: relative;
-        img{
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-        }
-        h4 {
-            margin-right: 10px;
-            
-        }
-        .angle__down {
-            font-size: 1.4rem;
-            margin-bottom: 2px;
-        }
-        span {
-            position: absolute;
-            width: 100%;
-            transform: scaleX(0);
-            height: 1px;
-            background: rgb(192,192,192);
-            bottom: -2px;
-            transition: all 0.3s linear;
-            transform-origin: 50% 50%;
-        }
     }
-    .info:hover span {
-       transform: scaleX(1);
-    }
+
     .notification {
         padding: 4px 12px;
         background: rgb(25, 22, 44);

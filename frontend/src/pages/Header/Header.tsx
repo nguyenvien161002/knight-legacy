@@ -1,118 +1,16 @@
 
-import Web3Modal from 'web3modal';
 import { useEffect,useRef, useState} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp ,IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import { faAngleDown} from '@fortawesome/free-solid-svg-icons'; 
-import Web3 from 'web3';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames/bind';
 import style from './Header.module.scss';
-import { upload } from '../../redux/walletReducer';
-import { useAppDispatch, useAppSelector } from "../../redux/hook";
-import axios from 'axios';
-import KnightApi from "../../api/KnightApi";
+import ButtonConnect from '../../components/reuse/ButtonConnect/ButtonConnect';
 const cx = classNames.bind(style);
 const faAnngleIC = faAngleDown as IconDefinition;
 
 function Header() {
-    const web3Modal = new Web3Modal({
-      cacheProvider: true,
-      providerOptions:{}
-    });
-    
-    
-    const wallet = useAppSelector(state => state.wallet.value)
-    const dispatch = useAppDispatch();
-    const [provider, setProvider] = useState<any>()
-    const [library, setLibrary] = useState<any>();
-    function ellipsisAddress(address: string) {
-        if(address){
-        const addressToArray = address.split('');
-        const firstAddress = addressToArray.splice(0,5).join('');
-        const endAddress = addressToArray.splice((addressToArray.length - 4)).join('');
-        return firstAddress + '...' + endAddress 
-        } else {
-          return null 
-        }
-    }   
-
-    const connectWallet = async () => {
-      try {
-        const provider = await web3Modal.connect();
-        const library = new Web3(provider);
-        const accounts = await library.eth.getAccounts();
-        setProvider(provider);
-        setLibrary(library);
-        if (accounts) {
-          dispatch(upload(accounts[0]));
-          localStorage.setItem('wallet', accounts[0]);
-        };
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    const refreshState = () => {
-      dispatch(upload(""));
-      localStorage.removeItem('wallet');
-    };
-    const disconnect = async () => {
-      await web3Modal.clearCachedProvider();
-      refreshState();
-    };
-    useEffect(() => {
-      if (provider?.on) {
-        const handleAccountsChanged = (accounts:any) => {
-          dispatch(upload(accounts[0]));
-          localStorage.setItem('wallet', accounts[0]);
-        };
-    
-        const handleDisconnect = () => {
-          disconnect();
-        };
-    
-        provider.on("accountsChanged", handleAccountsChanged);
-        provider.on("disconnect", handleDisconnect);
-    
-        return () => {
-          if (provider.removeListener) {
-            provider.removeListener("accountsChanged", handleAccountsChanged);
-            provider.removeListener("disconnect", handleDisconnect);
-          }
-        };
-      }
-    }, [provider]);
-    //hook to automatically connect to the cached provider
-    useEffect(() => {
-      if (web3Modal.cachedProvider) {
-        connectWallet();
-      }
-    }, []);
-    useEffect(() => {
-      interface Knight {
-        createdAt: string,
-        dna: string,
-        knightID: string,
-        name:string,
-        owner: string,
-        tokenURI: string,
-        updatedAt: string,
-        __v: number
-        _id:string,
-      }
-      const params = {owner: wallet}
-      KnightApi.getAll(params)
-      .then((data : any ) =>{
-        const {knightsOfOwner} = data;
-        const listKnight =  knightsOfOwner.map((knight: Knight) => {
-          axios.get(`https://ipfs.io/ipfs/${(knight.tokenURI).split('//')[1]}`)
-          .then((data) => ({...knight, tokenURI: data.data.image}))
-          
-        })
-        console.log(listKnight);
-      })
-      .catch((error) => console.log(error))
-    }, [])
     return (
         <header className={cx('header')}>
             <div className={cx('header__item-left')}>
@@ -139,11 +37,8 @@ function Header() {
                       <Link to={'/stats'}> Stats <FontAwesomeIcon className={cx('menu__item-ic')} icon={faAnngleIC} /></Link>
                     </li>
                 </ul>
-                <div className={cx('menu__button')} id="btn_connect-wallte">
-                   <div>
-                    {wallet ?<button  onClick={connectWallet}>{ellipsisAddress(wallet)} <FontAwesomeIcon className={cx('down-icon')} icon={faAnngleIC} /> </button>  : <button  onClick={connectWallet}>Connect Wallet</button>  }
-                    { wallet ? <button  onClick={disconnect} className={cx('disconnect__btn')} >{"Disconnect"}</button> : ''}
-                   </div>
+                <div className={cx('header__button-connect')}>
+                  <ButtonConnect></ButtonConnect>
                 </div>
             </div>
         </header>

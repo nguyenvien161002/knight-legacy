@@ -4,10 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import { faAngleDown, faStore, faCreditCard, faChartLine, faHistory, faHomeLg, faCog, faSignOut, faSearch, faHammer} from '@fortawesome/free-solid-svg-icons'; 
 import { faBell } from "@fortawesome/free-regular-svg-icons";
-import yi from '../../../assets/images/yi.png';
 import logo from '../../../assets/images/logo-dashboard.png';
 import classNames from "classnames/bind";
 import style from "./DashboardLayout.module.scss";
+import ButtonConnect from "../../reuse/ButtonConnect/ButtonConnect";
 const cx = classNames.bind(style);
 const faBellIC = faBell as IconDefinition;
 const faAnngleIC = faAngleDown as IconDefinition;
@@ -22,22 +22,6 @@ const faSearchIC = faSearch as IconDefinition;
 const faHammerIC = faHammer as IconDefinition;
 
 function DefaultLayout() {
-
-  const [account, setAccount] = useState<string>(() => {
-      const wallet = localStorage.getItem('wallet') ?? "";
-      return wallet;
-  })
-
-  function ellipsisAddress(address: string) {
-      if(address){
-      const addressToArray = address.split('');
-      const firstAddress = addressToArray.splice(0,5).join('');
-      const endAddress = addressToArray.splice((addressToArray.length - 4)).join('');
-      return firstAddress + '...' + endAddress 
-      } else {
-        return null 
-      }
-  }
 
   return (
     <section className={cx(["wrapper"])}>
@@ -74,10 +58,7 @@ function DefaultLayout() {
                     <FontAwesomeIcon className={cx('bell')}   icon={faBellIC} />
                 </div>
                 <div  className={cx("info")}>
-                    <img src={yi} alt="" width="50" />
-                    <h4> {ellipsisAddress(account)}</h4>
-                    <FontAwesomeIcon className={cx('angle__down')}   icon={faAnngleIC} />
-                    <span></span>
+                    <ButtonConnect></ButtonConnect>
                 </div>
               </div>
           </header>

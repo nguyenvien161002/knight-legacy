@@ -79,50 +79,9 @@
                 text-decoration: none;
             }
         }
-        .menu__button {
-            position: relative;
-            top: 16px;
-            &:hover .disconnect__btn {
-                top: 58px;
-            }
-            &:hover .down-icon {
-                transform: rotate(-180deg);
-            }
-            button {
-                color: white;
-                padding: 10px 20px;
-                font-size: 2rem;
-                background: linear-gradient(to right,rgb(14,164,185),rgb(77,127,216),rgb(136,94,246));
-                border-radius: 8px;
-                background-size: 300% 100%;
-                moz-transition: all .4s ease-in-out;
-                -o-transition: all .4s ease-in-out;
-                -webkit-transition: all .4s ease-in-out;
-                transition: all .4s ease-in-out;
-                box-shadow: 0 4px 15px 0 rgba(49, 196, 190, 0.75);
-            }
-            button:hover {
-                background-position: 100% 0;
-                moz-transition: all .4s ease-in-out;
-                -o-transition: all .4s ease-in-out;
-                -webkit-transition: all .4s ease-in-out;
-                transition: all .4s ease-in-out;
-            }
-            .down-icon {
-                transition: all 0.2s linear;
-            }
-            .disconnect__btn {
-                transition: all 0.3s ease;
-                position: absolute;
-                top: 1px;
-                padding: 8px 20px;
-                right: 0px;
-                z-index: -1;
-                background-image: linear-gradient(to right, #f5ce62, #e43603, #fa7199, #e85a19);
-                box-shadow: 0 4px 15px 0 rgba(229, 66, 10, 0.75);
-            }
+        .header__button-connect {
+            margin-top: 16px;
         }
-        
         
     }
 }
