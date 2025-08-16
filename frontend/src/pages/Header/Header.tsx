@@ -10,7 +10,8 @@ import classNames from 'classnames/bind';
 import style from './Header.module.scss';
 import { upload } from '../../redux/walletReducer';
 import { useAppDispatch, useAppSelector } from "../../redux/hook";
-
+import axios from 'axios';
+import KnightApi from "../../api/KnightApi";
 const cx = classNames.bind(style);
 const faAnngleIC = faAngleDown as IconDefinition;
 
@@ -19,6 +20,8 @@ function Header() {
       cacheProvider: true,
       providerOptions:{}
     });
+    
+    
     const wallet = useAppSelector(state => state.wallet.value)
     const dispatch = useAppDispatch();
     const [provider, setProvider] = useState<any>()
@@ -85,6 +88,31 @@ function Header() {
         connectWallet();
       }
     }, []);
+    useEffect(() => {
+      interface Knight {
+        createdAt: string,
+        dna: string,
+        knightID: string,
+        name:string,
+        owner: string,
+        tokenURI: string,
+        updatedAt: string,
+        __v: number
+        _id:string,
+      }
+      const params = {owner: wallet}
+      KnightApi.getAll(params)
+      .then((data : any ) =>{
+        const {knightsOfOwner} = data;
+        const listKnight =  knightsOfOwner.map((knight: Knight) => {
+          axios.get(`https://ipfs.io/ipfs/${(knight.tokenURI).split('//')[1]}`)
+          .then((data) => ({...knight, tokenURI: data.data.image}))
+          
+        })
+        console.log(listKnight);
+      })
+      .catch((error) => console.log(error))
+    }, [])
     return (
         <header className={cx('header')}>
             <div className={cx('header__item-left')}>
