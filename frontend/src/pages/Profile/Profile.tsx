@@ -1,23 +1,86 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import {Button, Modal, Toast, ToastContainer } from 'react-bootstrap';
 import classNames from 'classnames/bind';
 import style from './Profile.module.scss';
 import ahir from '../../assets/images/ahir-png.png';
-
 const cx = classNames.bind(style);
 function ShowFormKnight() {
     const [show, setShow] = useState(false);
-  
+    const [showToast, setShowA] = useState(false);
+    type DataToast = {
+        lable: String,
+        mesage: string,
+        time: string
+    }
+    const [dataToast, setDataToast] = useState({} as DataToast);
+    interface Knight  {
+        name: String,
+        image: string,
+        gender: string
+    }
+    const [inputKnight, setInputKnight] = useState<Knight>({} as Knight);
+
+
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-  
+    const toggleShowTost = () => setShowA(!showToast);
+    const handleInput = (e:any) => {
+        setInputKnight({
+            ...inputKnight,
+            [e.target.name]: e.target.value,
+        })
+    }
+    const handleInputFile = (e:React.ChangeEvent<HTMLInputElement>) => {
+        setInputKnight({
+            ...inputKnight,
+            [e.target.name]: e.target.files,
+        })
+    }
+
+    const createKnight = (e : any) => {
+        e.preventDefault();
+        // contract.methods.createKnight(inputKnight.name).send({
+        //     from: localStorage.getItem('wallet')
+        // })
+        // .then((data: any) => {
+        //     setDataToast({
+        //         lable: " Create knight ",
+        //         mesage: " Create knight successfully ",
+        //         time: " just now"
+        //     })
+        //     toggleShowTost();
+        // })
+        // .catch((err: any) => {
+        //     setDataToast({
+        //         lable: " Create knight ",
+        //         mesage: " Create knight false! </br> " +  err.message,
+        //         time: " just now"
+        //     })
+        //     toggleShowTost();
+        // });
+    }
     return (
       <div className={cx('modal-container')}>
+        <p>Chào mừng bạn đến với Knight NFT, Hãy tạo Knight đầu tiền của bạn và tham gia cuộc chiến cùng chúng tôi nhé. </p>
+        <p>Nhấp vào nút <b>"Create knight"</b> để tiếp tục!</p>
+
         <Button className={cx('active', 'shadow')} onClick={handleShow}>
           Create Knight
         </Button>
-  
+        <ToastContainer position="top-end" className="p-3">
+            <Toast show={showToast} onClose={toggleShowTost} delay={5000} autohide animation bg="primary">
+                <Toast.Header>
+                    <img
+                    src="holder.js/20x20?text=%20"
+                    className="rounded me-2"
+                    alt=""
+                    />
+                    <strong className="me-auto">{dataToast.lable}</strong>
+                    <small className="text-muted">{dataToast.time}</small>
+                </Toast.Header>
+                <Toast.Body>{dataToast.mesage}</Toast.Body>
+            </Toast>   
+        </ToastContainer>
         <Modal show={show} onHide={handleClose} className={cx('content-modal')}>
           <Modal.Header closeButton>
           </Modal.Header>
@@ -28,21 +91,21 @@ function ShowFormKnight() {
                 <div className={cx('spacer')}></div>
 
                 <div className={cx('form-group')}>
-                    <label htmlFor="fullname" className={cx('form-label')}>Name</label>
-                    <input id="fullname" name="fullname" type="text" placeholder="Knight Gnar" className={cx('form-control')} />
+                    <label htmlFor="name" className={cx('form-label')}>Name</label>
+                    <input id="name" name="name" type="text" onChange={handleInput} placeholder="Knight Gnar" className={cx('form-control')} />
                 </div>
                 <div className={cx('form-group')}>
                     <label htmlFor="image" className={cx('form-label')}>Image</label>
-                    <input id="image" name="image" type="file" className={cx('form-control')} />
+                    <input id="image" name="image" type="file"  onChange={handleInputFile} className={cx('form-control')} />
                 </div>
                 <div className={cx('form-group')}>
                 <label htmlFor="gender" className={cx('form-label')}>Gender</label>
-                <select id="gender" name="gender" className={cx('form-control')}>
-                    <option value="true">Male</option>
-                    <option value="false">Female</option>
+                <select id="gender" name="gender"  onChange={handleInput} className={cx('form-control')}>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
                 </select>
                 </div>
-                <button className={cx('form-submit')}>Create</button>
+                <button className={cx('form-submit')} onClick={createKnight}>Create</button>
             </form>
         </div>
           </Modal.Body>
@@ -74,7 +137,7 @@ function Profile() {
                         <div className={cx('banner__submit', 'banner__item')}>
                             <a href="#" className={cx('card-button', 'active', 'shadow')}>Bid Now</a>
                             <div className={cx('banner__expr')}>
-                                <p>Ending In <p className={cx('color-global')}>2d:15h:20m</p></p>
+                                <p>Ending In <span className={cx('color-global')}>2d:15h:20m</span></p>
                             </div>                   
                         </div>
                     </div>
@@ -109,9 +172,11 @@ function Profile() {
                                         <h3>65</h3>
                                     </div>
                                     <div className={cx('card-info', 'flex-card')}>
-                                        <p>Current Bid <p className={cx('color-global')}>1.2ETH</p>
+                                        <p>Current Bid 
+                                            <span className={cx('color-global')}>1.2ETH</span>
                                         </p>
-                                        <p>Ending in <p className={cx('color-global')}>1d:12h:10m</p>
+                                        <p>Ending in 
+                                            <span className={cx('color-global')}>1d:12h:10m</span>
                                         </p>
                                     </div>
                                     <div className={cx('card-submit', 'flex-card')}>
@@ -131,9 +196,11 @@ function Profile() {
                                         <h3>65</h3>
                                     </div>
                                     <div className={cx('card-info', 'flex-card')}>
-                                        <p>Current Bid <p className={cx('color-global')}>1.2ETH</p>
+                                        <p>Current Bid 
+                                            <span className={cx('color-global')}>1.2ETH</span>
                                         </p>
-                                        <p>Ending in <p className={cx('color-global')}>1d:12h:10m</p>
+                                        <p>Ending in 
+                                            <span className={cx('color-global')}>1d:12h:10m</span>
                                         </p>
                                     </div>
                                     <div className={cx('card-submit', 'flex-card')}>
@@ -153,9 +220,11 @@ function Profile() {
                                         <h3>65</h3>
                                     </div>
                                     <div className={cx('card-info', 'flex-card')}>
-                                        <p>Current Bid <p className={cx('color-global')}>1.2ETH</p>
+                                        <p>Current Bid 
+                                            <span className={cx('color-global')}>1.2ETH</span>
                                         </p>
-                                        <p>Ending in <p className={cx('color-global')}>1d:12h:10m</p>
+                                        <p>Ending in 
+                                            <span className={cx('color-global')}>1d:12h:10m</span>
                                         </p>
                                     </div>
                                     <div className={cx('card-submit', 'flex-card')}>

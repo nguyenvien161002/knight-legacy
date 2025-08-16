@@ -1,4 +1,5 @@
 import { Outlet, Link } from "react-router-dom";
+import { useState } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {IconDefinition} from '@fortawesome/fontawesome-svg-core';
 import { faAngleDown, faStore, faCreditCard, faChartLine, faHistory, faHomeLg, faCog, faSignOut, faSearch} from '@fortawesome/free-solid-svg-icons'; 
@@ -19,6 +20,23 @@ const faCogIC = faCog as IconDefinition;
 const faSignOutIC = faSignOut as IconDefinition;
 const faSearchIC = faSearch as IconDefinition;
 function DefaultLayout() {
+
+  const [account, setAccount] = useState<string>(() => {
+      const wallet = localStorage.getItem('wallet') ?? "";
+      return wallet;
+  })
+
+  function ellipsisAddress(address: string) {
+      if(address){
+      const addressToArray = address.split('');
+      const firstAddress = addressToArray.splice(0,5).join('');
+      const endAddress = addressToArray.splice((addressToArray.length - 4)).join('');
+      return firstAddress + '...' + endAddress 
+      } else {
+        return null 
+      }
+  }
+
   return (
     <section className={cx(["wrapper"])}>
        <div className={cx("sidebar")}>
@@ -54,7 +72,7 @@ function DefaultLayout() {
                 </div>
                 <div  className={cx("info")}>
                     <img src={yi} alt="" width="50" />
-                    <h4> Ethereum Blockchian</h4>
+                    <h4> {ellipsisAddress(account)}</h4>
                     <FontAwesomeIcon className={cx('angle__down')}   icon={faAnngleIC} />
                     <span></span>
                 </div>
