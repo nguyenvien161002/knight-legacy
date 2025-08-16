@@ -183,8 +183,8 @@ function Attack() {
                                 <div className={cx('card-title')}>{item.name}</div>
                                 <span className={cx('card-level')}>Level {item.level}</span>
                                 <p className={cx('card-description')}>
-                                    <p>Gender: {item.gender === 0 ? 'Male' : 'Female'}</p>
-                                    <p>Point: {item.point}</p>
+                                    <span>Gender: {item.gender === 0 ? 'Male' : 'Female'}</span>
+                                    <span>Point: {item.point}</span>
                                 </p>  
                                 <p
                                   className={cx('card-button')}

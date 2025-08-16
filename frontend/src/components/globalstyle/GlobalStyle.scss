@@ -43,7 +43,10 @@ button {
 }
 .modal-content {
     background:  rgb(19,17,41);;
+    background-color:  rgb(19,17,41) !important;
+    border: none !important;
 }
+
 /* width */
 ::-webkit-scrollbar {
     width: 12px;
