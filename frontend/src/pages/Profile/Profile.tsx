@@ -1,10 +1,63 @@
-
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import classNames from 'classnames/bind';
 import style from './Profile.module.scss';
 import ahir from '../../assets/images/ahir-png.png';
 
 const cx = classNames.bind(style);
+function ShowFormKnight() {
+    const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+    return (
+      <div className={cx('modal-container')}>
+        <Button className={cx('active', 'shadow')} onClick={handleShow}>
+          Create Knight
+        </Button>
+  
+        <Modal show={show} onHide={handleClose} className={cx('content-modal')}>
+          <Modal.Header closeButton>
+          </Modal.Header>
+          <Modal.Body>
+        <div className={cx('main')}>
+            <form action="" method="POST" className={cx('form')} >
+                <h3 className={cx('heading')}>Create Knight</h3>
+                <div className={cx('spacer')}></div>
+
+                <div className={cx('form-group')}>
+                    <label htmlFor="fullname" className={cx('form-label')}>Name</label>
+                    <input id="fullname" name="fullname" type="text" placeholder="Knight Gnar" className={cx('form-control')} />
+                </div>
+                <div className={cx('form-group')}>
+                    <label htmlFor="image" className={cx('form-label')}>Image</label>
+                    <input id="image" name="image" type="file" className={cx('form-control')} />
+                </div>
+                <div className={cx('form-group')}>
+                <label htmlFor="gender" className={cx('form-label')}>Gender</label>
+                <select id="gender" name="gender" className={cx('form-control')}>
+                    <option value="true">Male</option>
+                    <option value="false">Female</option>
+                </select>
+                </div>
+                <button className={cx('form-submit')}>Create</button>
+            </form>
+        </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  
 function Profile() {
+   
     return <div className={cx('profile')}>
         <div className={cx('container')}>
                 <div className={cx('content')}>
@@ -19,7 +72,7 @@ function Profile() {
                             Upload By Alenxander Vernof
                         </p>
                         <div className={cx('banner__submit', 'banner__item')}>
-                            <a href="#" className={cx('card-button', 'active')}>Bid Now</a>
+                            <a href="#" className={cx('card-button', 'active', 'shadow')}>Bid Now</a>
                             <div className={cx('banner__expr')}>
                                 <p>Ending In <p className={cx('color-global')}>2d:15h:20m</p></p>
                             </div>                   
@@ -30,9 +83,9 @@ function Profile() {
                             <div className={cx('feed__option')}>
                                 <span>Feed</span>
                                 <select>
-                                    <option value="">Popular</option>
-                                    <option value="">Popular</option>
-                                    <option value="">Popular</option>
+                                    <option className={cx('option-feed')} value="">Popular</option>
+                                    <option className={cx('option-feed')} value="">Popular</option>
+                                    <option className={cx('option-feed')} value="">Popular</option>
                                 </select>
                             </div>
                             <div className={cx('feed__choice')}>
@@ -44,7 +97,8 @@ function Profile() {
                                 </ul>
                             </div>
                         </div>
-                        <div className={cx('card-container')}>
+                        <ShowFormKnight />
+                        <div className={cx('card-container', 'hidden')}>
                             <div className={cx('card-item')}>
                                 <div className={cx('card-image')}>
                                     <img src={ahir} height="100%"  alt="" />
@@ -170,6 +224,7 @@ function Profile() {
                             </div>
                             <a href="#">Follow</a>
                         </div>
+                        
                     </div>
                 </div>
         </div>
