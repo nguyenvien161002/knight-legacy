@@ -25,7 +25,7 @@ const Web3Provider = ({ children }: Props) => {
         setWeb3Api({
           contract: new web3.eth.Contract(
             ABI_KnightNFT as unknown as AbiItem[],
-            "0xC6B6af5908125f12D3614424Bd6823fAB25C91D9",
+            "0x395c66aAe34511B0D15E979F64c19497981DB7ab",
           ), // Rinkeby Testnet Network
           web3,
         })
