@@ -26,6 +26,7 @@ import Header from "../Header/Header"
 import { useWeb3, useMetamark } from "../../provider"
 import KnightApi from "../../api/KnightApi"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
+import { useAppSelector } from "../../redux/hook"
 const cx = classNames.bind(style)
 const faHeartIC = faHeart as IconDefinition
 const faArrowRightIC = faArrowRight as IconDefinition
@@ -36,15 +37,17 @@ const faShoppingCartIC = faShoppingCart as IconDefinition
 function Home() {
   const { contract, web3 } = useWeb3()
   const { ellipsisAddress } = useMetamark()
+  const wallet = useAppSelector((state) => state.wallet.value)
   interface DataSaleKnight {
     bidID: string
     knightID: string
     owner: string
     price: string
     createdAt: string
+    image: string
   }
   const [saleKnights, setSaleKnights] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
-  console.log(saleKnights)
+  const [render, setRender] = useState(false)
   useEffect(() => {
     setTimeout(() => {
       const banner__right = document.getElementById("banner__right_img")
@@ -71,7 +74,15 @@ function Home() {
         setSaleKnights([])
         console.log(error)
       })
-  }, [])
+  }, [render])
+
+  const handleBuyKnight = (bidId: string, value: string) => {
+    contract?.methods
+      .buyKnight(bidId)
+      .send({ from: wallet, value })
+      .then((data: any) => setRender(!render))
+      .catch((err: any) => setRender(!render))
+  }
 
   return (
     <div className={cx("home")}>
@@ -120,7 +131,7 @@ function Home() {
                 return (
                   <div key={knight.bidID} className={cx("bg__gradient-item")}>
                     <div>
-                      <img src={kata} width="300" alt="" className={cx("product__image")} />
+                      <img src={knight.image} width="300" alt="" className={cx("product__image")} />
                     </div>
                     <div className={cx("product__time")}>
                       <CountDownTime time={bidend}></CountDownTime>
@@ -138,7 +149,7 @@ function Home() {
                       <span>{ellipsisAddress(knight.owner)}</span>
                     </div>
                     <div className={cx("product__btn-buy")}>
-                      <button>
+                      <button onClick={() => handleBuyKnight(knight.bidID, knight.price)}>
                         Place a Bid <FontAwesomeIcon icon={faArrowRightIC} />{" "}
                       </button>
                     </div>
@@ -146,52 +157,6 @@ function Home() {
                 )
               })
             : " "}
-
-          {/* <div className={cx('bg__gradient-item')}>
-                    <div><img src={yi} width="300"  alt="" className={cx('product__image')} /></div>
-                    <div className={cx('product__time')}>6d 15h 34m 30s</div>
-                    <div className={cx('product__info')}>
-                        <h3 className={cx('product__price')}>0.08ETH <span>1/20</span></h3>
-                        <h3> <FontAwesomeIcon className={cx('icon')} icon={faHeartIC} /><span>56</span></h3>
-                    </div>
-                    <div className={cx('product__owner')}>
-                        <img src={yone} alt="" />
-                        <span>@Knight_nft.pro</span>
-                    </div>
-                    <div className={cx('product__btn-buy')}>
-                        <button>Place a Bid <FontAwesomeIcon icon={faArrowRightIC}/> </button>
-                    </div>
-                </div>
-                <div className={cx('bg__gradient-item')}>
-                    <div><img src={ahir} width="300"  alt="" className={cx('product__image')} /></div>
-                    <div className={cx('product__time')}>6d 15h 34m 30s</div>
-                    <div className={cx('product__info')}>
-                        <h3 className={cx('product__price')}>0.08ETH <span>1/20</span></h3>
-                        <h3> <FontAwesomeIcon className={cx('icon')} icon={faHeartIC} /><span>56</span></h3>
-                    </div>
-                    <div className={cx('product__owner')}>
-                        <img src={yone} alt="" />
-                        <span>@Knight_nft.pro</span>
-                    </div>
-                    <div className={cx('product__btn-buy')}>
-                        <button>Place a Bid <FontAwesomeIcon icon={faArrowRightIC}/> </button>
-                    </div>
-                </div>
-                <div className={cx('bg__gradient-item')}>
-                    <div><img src={talon} width="300"  alt="" className={cx('product__image')} /></div>
-                    <div className={cx('product__time')}>6d 15h 34m 30s</div>
-                    <div className={cx('product__info')}>
-                        <h3 className={cx('product__price')}>0.08ETH <span>1/20</span></h3>
-                        <h3> <FontAwesomeIcon className={cx('icon')} icon={faHeartIC} /><span>56</span></h3>
-                    </div>
-                    <div className={cx('product__owner')}>
-                        <img src={yone} alt="" />
-                        <span>@Knight_nft.pro</span>
-                    </div>
-                    <div className={cx('product__btn-buy')}>
-                        <button>Place a Bid <FontAwesomeIcon icon={faArrowRightIC}/> </button>
-                    </div>
-                </div> */}
         </div>
         <div className={cx("intro__team-dev")}>
           <h2>HOW WE WORK</h2>
