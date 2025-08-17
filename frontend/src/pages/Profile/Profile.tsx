@@ -7,31 +7,35 @@ import { useAppSelector } from "../../redux/hook"
 import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
+import KnightApi from "../../api/KnightApi"
 
 const cx = classNames.bind(style)
 
 function Profile() {
   interface DataKnight {
-    dna: string
-    excitementPoint: string
-    gender: string
-    level: string
-    lostCount: string
+    _id: string
     name: string
-    readyTime: string
-    sexTime: string
-    winCount: string
+    owner: string
+    knightID: number
+    tokenURI: string
+    dna: string
+    image: string
+    createdAt: string
+    updatedAt: string
+    attackTime: number
+    level: number
+    lostCount: number
+    sexTime: number
+    winCount: number
   }
   const [KnightsOfOwner, setKnightOwner] = useState<DataKnight[]>([])
   const wallet = useAppSelector((state) => state.wallet.value)
   const { contract } = useWeb3()
   useEffect(() => {
     if (wallet) {
-      contract?.methods
-        .getAllKnightsByOwner(wallet)
-        .call()
+      KnightApi.getAll({ owner: wallet })
         .then((result: any) => {
-          setKnightOwner(result)
+          setKnightOwner(result.knightsOfOwner)
         })
         .catch((err: any) => {
           console.log(err)
