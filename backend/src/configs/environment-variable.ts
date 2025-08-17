@@ -8,7 +8,7 @@ const logger = new Logger('ENV');
 export const env = {
   port: process.env.PORT,
   mongodb: {
-    stringConnect: process.env.MONGODB_STRING_CONNECT,
+    stringConnect: process.env.MONGO_CONNECT_URL,
   },
   auth: {
     secret: process.env.SECRET_JWT,
@@ -24,6 +24,7 @@ export const env = {
 
 const envSchema = Joi.object({
   PORT: Joi.number().port().default(9090),
+  MONGO_CONNECT_URL: Joi.string().required(),
   SECRET_JWT: Joi.string().required(),
   SECRET_JWT_REFRESH: Joi.string().required(),
   EMAIL_HOST: Joi.string().required(),
