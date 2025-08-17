@@ -3,16 +3,18 @@ import Web3 from "web3"
 import { AbiItem } from "web3-utils"
 import detectEthereumProvider from "@metamask/detect-provider"
 import ABI_KnightNFT from "../../utility/ABI_KnightNFT.json"
-interface AppContextInterface {
+interface Web3Method {
   contract: any
+  web3: any
 }
 type Props = {
   children: React.ReactNode
 }
-const Web3Context = createContext<AppContextInterface>({} as AppContextInterface)
+const Web3Context = createContext<Web3Method>({} as Web3Method)
 const Web3Provider = ({ children }: Props) => {
-  const initValueWeb3: AppContextInterface = {
+  const initValueWeb3: Web3Method = {
     contract: null,
+    web3: null,
   }
   const [web3Api, setWeb3Api] = useState(initValueWeb3)
   useEffect(() => {
@@ -23,8 +25,9 @@ const Web3Provider = ({ children }: Props) => {
         setWeb3Api({
           contract: new web3.eth.Contract(
             ABI_KnightNFT as unknown as AbiItem[],
-            "0x9432E1a37E144EEc7ddFAb974807a1Ad5964AAcb",
-          ), // Ropsten Network
+            "0xC6B6af5908125f12D3614424Bd6823fAB25C91D9",
+          ), // Rinkeby Testnet Network
+          web3,
         })
       } else {
         console.error("please, Install Metamask")
