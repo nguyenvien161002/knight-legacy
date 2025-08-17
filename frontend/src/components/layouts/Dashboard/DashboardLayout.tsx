@@ -83,6 +83,13 @@ function DefaultLayout() {
                 <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
               </Link>{" "}
             </li>
+            <li className={cx(["list__item"])}>
+              {" "}
+              <Link to={"/wedding"}>
+                {" "}
+                <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
+              </Link>{" "}
+            </li>
           </ul>
         </div>
         <div className={cx("action")}>
