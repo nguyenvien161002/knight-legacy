@@ -2,20 +2,32 @@ import axiosClient from "./ClientAxios"
 
 const authorizationApi = {
   getAll: (params: any) => {
-    const url = `api/v1/knight/get-all`
+    const url = `v1/api/knight/get-all`
     return axiosClient.get(url, { params })
   },
   getSaleKnight: (params: any) => {
-    const url = `api/v1/knights/sale`
+    const url = `v1/api/knight/get-sale-knight`
     return axiosClient.get(url, { params })
   },
   getKnightById: (params: any) => {
-    const url = `api/v1/knight/get-knight-id`
+    const url = `v1/api/knight/get-knight-id`
     return axiosClient.get(url, { params })
   },
   getKnightNotOwwner: (params: any) => {
-    const url = `/api/v1/knight/knight-not-owner`
+    const url = `v1/api/knight/knight-not-owner`
     return axiosClient.get(url, { params })
+  },
+  getRequestMarry: (params: any) => {
+    const url = `v1/api/knight/request-marri`
+    return axiosClient.get(url, { params })
+  },
+  storeRequestMarry: (params: any) => {
+    const url = `v1/api/knight/request-marri`
+    return axiosClient.post(url, params)
+  },
+  updateRequestMarry: (params: any) => {
+    const url = `v1/api/knight/request-marri`
+    return axiosClient.put(url, params)
   },
 }
 

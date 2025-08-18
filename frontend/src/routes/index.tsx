@@ -4,6 +4,7 @@ import User from "../pages/User/User"
 import Attack from "../pages/Attack/Attack"
 import SaleKnight from "../pages/Saleknight/Saleknight"
 import Wedding from "../pages/Wedding/Wedding"
+import Marriage from "../pages/Marriage/Marriage"
 
 const publicRoutes: Array<{ path: string; component: any; layout?: string }> = [
   { path: "/", component: Home },
@@ -13,6 +14,7 @@ const publicRoutes: Array<{ path: string; component: any; layout?: string }> = [
   { path: "/attack", component: Attack, layout: "dashboard" },
   { path: "/sale", component: SaleKnight, layout: "dashboard" },
   { path: "/wedding", component: Wedding, layout: "dashboard" },
+  { path: "/request-marriage", component: Marriage, layout: "dashboard" },
 ]
 
 export { publicRoutes }
