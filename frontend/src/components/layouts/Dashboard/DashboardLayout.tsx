@@ -13,6 +13,7 @@ import {
   faSignOut,
   faSearch,
   faHammer,
+  faChildren,
 } from "@fortawesome/free-solid-svg-icons"
 import { faBell } from "@fortawesome/free-regular-svg-icons"
 import logo from "../../../assets/images/logo-dashboard.png"
@@ -31,6 +32,7 @@ const faCogIC = faCog as IconDefinition
 const faSignOutIC = faSignOut as IconDefinition
 const faSearchIC = faSearch as IconDefinition
 const faHammerIC = faHammer as IconDefinition
+const faChildrenIC = faChildren as IconDefinition
 
 function DefaultLayout() {
   return (
@@ -87,7 +89,7 @@ function DefaultLayout() {
               {" "}
               <Link to={"/wedding"}>
                 {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
+                <FontAwesomeIcon className={cx("store")} icon={faChildrenIC} />{" "}
               </Link>{" "}
             </li>
           </ul>
