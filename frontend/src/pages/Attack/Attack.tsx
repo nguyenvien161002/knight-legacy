@@ -1,208 +1,181 @@
 import { useState, useEffect } from "react"
-import Modal from "react-bootstrap/Modal"
+import { Modal, Button } from "react-bootstrap"
 import ThemeProvider from "react-bootstrap/ThemeProvider"
 import classNames from "classnames/bind"
-
 import style from "./Attack.module.scss"
-import ahir from "../../assets/images/ahir-png.png"
+import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
+import knightApi from "../../api/KnightApi"
+import lose from "../../assets/images/lose.png"
+import victory from "../../assets/images/victory.png"
+import { useAppSelector } from "../../redux/hook"
+import { useMetamark, useWeb3 } from "../../provider"
+import { Loading } from "notiflix/build/notiflix-loading-aio"
+import { Notify } from "notiflix"
+import { DataKnight } from "../../type"
 const cx = classNames.bind(style)
 
-let rawDataNftsCompetior = [
-  {
-    id: "0",
-    name: "Knight 1",
-    gender: 1,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-  {
-    id: "1",
-    name: "Knight 2",
-    gender: 0,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-  {
-    id: "2",
-    name: "Knight 3",
-    gender: 1,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-  {
-    id: "3",
-    name: "Knight 4",
-    gender: 1,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-  {
-    id: "4",
-    name: "Knight 5",
-    gender: 1,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-]
-let rawDataNftsOwner = [
-  {
-    id: "5",
-    name: "Knight 5",
-    gender: 1,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-  {
-    id: "6",
-    name: "Knight 6",
-    gender: 0,
-    level: 20,
-    point: 230,
-    image: ahir,
-  },
-]
-
-function ShowCartAttack(props: any) {
-  return (
-    <div className={cx("maincontainer", props.show ? "show" : "hide")}>
-      <div className={cx("thecard")}>
-        <div className={cx("thefront")}></div>
-        <div className={cx("theback")}></div>
-      </div>
-    </div>
-  )
-}
-
-function ShowNftOwner(props: any) {
-  const [toastMessage, setToastMessage] = useState(false)
-  const [showListNftOwner, setShowListNftOwner] = useState(true)
-  const [listNftOwner, setListNftOwner] = useState(() => rawDataNftsOwner)
-  const [selectNftOwner, setSelectNftOwner] = useState()
-  const [showCardAttack, setShowCardAttack] = useState(false)
-  const attackHandler = () => {
-    if (selectNftOwner) {
-      setToastMessage(false)
-      setShowListNftOwner(false)
-      setShowCardAttack(true)
-      setTimeout(() => {
-        setShowCardAttack(false)
-      }, 4000)
-    } else {
-      setToastMessage(true)
-    }
-  }
-  const selectNftOwnerHandler = (item: any) => {
-    setSelectNftOwner(item.id)
-    setToastMessage(false)
-    console.log(item)
-  }
-  return (
-    <>
-      <div className={cx("modal-container", showListNftOwner ? "show" : "hide")}>
-        <div className={cx("modal-wrapper")}>
-          <div className={cx("list-competior")}>
-            <div className={cx("card")}>
-              <h3 className={cx("title")}>{props.nftcompetitor.name}</h3>
-              <h3 className={cx("level")}>Level: {props.nftcompetitor.level}</h3>
-              <div className={cx("bar")}>
-                <div className={cx("emptybar")}></div>
-                <div className={cx("filledbar")}></div>
-              </div>
-              <div className={cx("circle")}>
-                <img src={props.nftcompetitor.image} alt="" className={cx("card-img")} />
-              </div>
-            </div>
-          </div>
-          <h1>VS</h1>
-          <div className={cx("list-owner")}>
-            {listNftOwner.map((item) => (
-              <div
-                className={cx("card", item.id === selectNftOwner ? "active" : "")}
-                onClick={() => selectNftOwnerHandler(item)}
-                key={item.id}
-              >
-                <h3 className={cx("title")}>{item.name}</h3>
-                <h3 className={cx("level")}>Level: {item.level}</h3>
-                <div className={cx("bar")}>
-                  <div className={cx("emptybar")}></div>
-                  <div className={cx("filledbar")}></div>
-                </div>
-                <div className={cx("circle")}>
-                  <img src={item.image} alt="" className={cx("card-img")} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={cx("btn-container")}>
-          {toastMessage && (
-            <h1 data-text="PLEASE CHOOSE YOUR NFT..." className={cx("toast-message")}>
-              PLEASE CHOOSE YOUR NFT
-            </h1>
-          )}
-          <div className={cx("btn")} onClick={attackHandler}>
-            <div className={cx("inner")}></div>
-            <button>Attack</button>
-          </div>
-        </div>
-      </div>
-      {showCardAttack && (
-        <>
-          <ShowCartAttack show={showCardAttack} nftCompetitor={props.nftcompetitor} />
-          <ShowCartAttack show={showCardAttack} nftOwner={selectNftOwner} />
-        </>
-      )}
-    </>
-  )
-}
-function MyVerticallyCenteredModal(props: any) {
-  return (
-    <Modal {...props} show={props.show} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
-      <ShowNftOwner nftcompetitor={props.nftcompetitor} />
-    </Modal>
-  )
-}
-
 function Attack() {
+  const [KnightsNotOwner, setKnightNotOwner] = useState<DataKnight[]>([])
+  const [selectedKnight, setSelectedKnight] = useState<DataKnight>()
+  const [myKnight, setMyKnight] = useState<DataKnight>()
   const [modalShow, setModalShow] = useState(false)
+  const [modalAttack, setModalAttack] = useState(false)
+  const [resoultAttack, setResoultAttack] = useState(false)
+  const { wallet, knightsOwner } = useAppSelector((state) => state)
+  const { ellipsisAddress } = useMetamark()
+  const { contract } = useWeb3()
+  useEffect(() => {
+    knightApi
+      .getKnightNotOwwner({ owner: wallet.value })
+      .then((res: any) => {
+        setKnightNotOwner(res.knightsNotOwner)
+      })
+      .catch((error) => console.log(error))
+  }, [wallet])
 
-  const [nftCompetitor, setNftCompetitor] = useState({})
+  useEffect(() => {
+    const modalAttackDom = document.getElementsByClassName("modal-content") as HTMLCollectionOf<HTMLElement>
+    if (modalAttackDom.length > 0) {
+      modalAttackDom[0].classList.add("bg-transparent")
+    }
+    console.log(modalAttackDom)
+  }, [modalAttack])
 
-  const [listNft, setListNft] = useState(() => rawDataNftsCompetior)
-
-  const handleShowModal = (isShow: any, itemCompetior: any) => {
+  const handleShowModal = (isShow: boolean, selectedKnight: DataKnight) => {
     setModalShow(isShow)
-    setNftCompetitor(itemCompetior)
-    console.log(itemCompetior)
+    setSelectedKnight(selectedKnight)
+  }
+  const handleHiddenModal = () => {
+    setModalShow(!modalShow)
+    setMyKnight(undefined)
+    setSelectedKnight(undefined)
+  }
+  const handleAttack = () => {
+    setModalShow(false)
+    if (myKnight == undefined) {
+      Notify.warning("Chose your Knight")
+    } else {
+      Loading.arrows("Attack...")
+      contract.methods
+        .attack(myKnight?.knightID, selectedKnight?.knightID)
+        .send({ from: wallet.value })
+        .then((data: any) => {
+          console.log(data)
+          setModalAttack(!modalAttack)
+          if (data.events.battleResults.returnValues[0] == true) {
+            console.log("attack win")
+            setResoultAttack(true)
+          } else {
+            console.log("attack lose")
+            setResoultAttack(false)
+          }
+          Loading.remove()
+        })
+        .catch((error: any) => {
+          console.log(error)
+          Loading.remove()
+        })
+    }
   }
 
   return (
     <ThemeProvider breakpoints={["xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">
       <div className={cx("container")}>
-        {listNft.map((item) => (
-          <div className={cx("card")} key={item.id}>
-            <img src={item.image} alt="" className={cx("card-img")} />
+        {KnightsNotOwner.map((knight) => (
+          <div className={cx("card")} key={knight.dna}>
+            <img src={knight.image} alt="" className={cx("card-img")} />
+            <div className={cx("card-id")}> ID: {knight.knightID}</div>
+            <button className={cx("card-button")} onClick={() => handleShowModal(true, knight)}>
+              Attack
+            </button>
             <div className={cx("card-data")}>
-              <div className={cx("card-title")}>{item.name}</div>
-              <span className={cx("card-level")}>Level {item.level}</span>
-              <p className={cx("card-description")}>
-                <span>Gender: {item.gender === 0 ? "Male" : "Female"}</span>
-                <span>Point: {item.point}</span>
-              </p>
-              <p className={cx("card-button")} onClick={() => handleShowModal(true, item)}>
-                Chiến luôn
-              </p>
+              <div className={cx("card-title")}>{knight.name}</div>
+              <span className={cx("card-level")}>Level {knight.level}</span>
+              <div className={cx("card-description")}>
+                <div>Dna: {knight.dna}</div>
+                <div>Win count: {knight.winCount}</div>
+                <div>Lost count: {knight.lostCount}</div>
+                <div>Onwer: {ellipsisAddress(knight.owner)}</div>
+              </div>
             </div>
           </div>
         ))}
       </div>
-      <MyVerticallyCenteredModal show={modalShow} onHide={() => setModalShow(false)} nftcompetitor={nftCompetitor} />
+      <Modal
+        show={modalShow}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        onHide={handleHiddenModal}
+      >
+        <div className={cx("modal-container", "show")}>
+          <div className={cx("modal-wrapper")}>
+            <div className={cx("list-competior")}>
+              <div className={cx("card")}>
+                <h3 className={cx("title")}>{selectedKnight?.name}</h3>
+                <h3 className={cx("level")}>Level: {selectedKnight?.level} </h3>
+                <div className={cx("info")}>
+                  <div className={cx("win-count")}> Win: {selectedKnight?.winCount}</div>
+                  <div className={cx("lost-count")}> Lost: {selectedKnight?.lostCount}</div>
+                </div>
+                <div className={cx("bar")}>
+                  <div className={cx("emptybar")}></div>
+                  <div className={cx("filledbar")}></div>
+                </div>
+                <div className={cx("circle")}>
+                  <img src={selectedKnight?.image} alt="" className={cx("card-img")} />
+                </div>
+              </div>
+            </div>
+            <h1>VS</h1>
+            <div className={cx("list-owner")}>
+              {knightsOwner.value.map((knight) => (
+                <div
+                  className={cx("card", knight.knightID === myKnight?.knightID ? "active" : "")}
+                  onClick={() => setMyKnight(knight)}
+                  key={knight._id}
+                >
+                  <h3 className={cx("title")}>{knight.name}</h3>
+                  <div className={cx("attack-time")}>
+                    <CountDownTime time={knight.attackTime}></CountDownTime>
+                  </div>
+                  <div className={cx("info")}>
+                    <div className={cx("level")}> Level: {selectedKnight?.level}</div>
+                    <div className={cx("win-count")}> Win: {selectedKnight?.winCount}</div>
+                    <div className={cx("lost-count")}> Lost: {selectedKnight?.lostCount}</div>
+                  </div>
+                  <div className={cx("bar")}>
+                    <div className={cx("emptybar")}></div>
+                    <div className={cx("filledbar")}></div>
+                  </div>
+                  <div className={cx("circle")}>
+                    <img src={knight.image} alt="" className={cx("card-img")} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={cx("btn-container")}>
+            <div className={cx("btn")} onClick={handleAttack}>
+              <div className={cx("inner")}></div>
+              <button>Attack</button>
+            </div>
+          </div>
+        </div>
+      </Modal>
+      <Modal show={modalAttack} onHide={() => setModalAttack(!modalAttack)}>
+        <Modal.Body className={cx("modal-attack")}>
+          <img src={resoultAttack ? victory : lose} alt="" />
+          <h3 className={cx("notifi")}>
+            {" "}
+            Congratulations to your knight on victory <br /> visit profile to get new knight{" "}
+          </h3>
+          <Button className={cx("btn-accept")} onClick={() => setModalAttack(!modalAttack)}>
+            {" "}
+            Accept{" "}
+          </Button>
+        </Modal.Body>
+      </Modal>
     </ThemeProvider>
   )
 }

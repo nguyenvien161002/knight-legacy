@@ -13,6 +13,10 @@ const authorizationApi = {
     const url = `api/v1/knight/get-knight-id`
     return axiosClient.get(url, { params })
   },
+  getKnightNotOwwner: (params: any) => {
+    const url = `/api/v1/knight/knight-not-owner`
+    return axiosClient.get(url, { params })
+  },
 }
 
 export default authorizationApi
