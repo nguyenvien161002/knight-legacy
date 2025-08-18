@@ -21,15 +21,20 @@ function SaleKnight() {
     time: "3600",
   })
   interface DataKnight {
-    dna: string
-    excitementPoint: string
-    gender: string
-    level: string
-    lostCount: string
+    _id: string
     name: string
-    readyTime: string
-    sexTime: string
-    winCount: string
+    owner: string
+    knightID: number
+    tokenURI: string
+    dna: string
+    image: string
+    createdAt: string
+    updatedAt: string
+    attackTime: number
+    level: number
+    lostCount: number
+    sexTime: number
+    winCount: number
   }
   const [KnightsOfOwner, setKnightOwner] = useState<DataKnight[]>([])
   const [knightID, setKnightID] = useState(0)
@@ -37,11 +42,9 @@ function SaleKnight() {
   const { contract, web3 } = useWeb3()
   useEffect(() => {
     if (wallet) {
-      contract?.methods
-        .getAllKnightsByOwner(wallet)
-        .call()
+      KnightApi.getAll({ owner: wallet })
         .then((result: any) => {
-          setKnightOwner(result)
+          setKnightOwner(result.knightsOfOwner)
         })
         .catch((err: any) => {
           console.log(err)
@@ -78,19 +81,23 @@ function SaleKnight() {
           ? KnightsOfOwner.map((knight) => {
               return (
                 <div className={cx("card")} key={knight.dna}>
-                  <img src={ahir} alt="" className={cx("card-img")} />
+                  <img src={knight.image} alt="" className={cx("card-img")} />
+                  <div className={cx("card-id")}> ID: {knight.knightID}</div>
+                  <button className={cx("card-button")} onClick={() => handleShowModal(knight.dna)}>
+                    Sale
+                  </button>
                   <div className={cx("card-data")}>
                     <div className={cx("card-title")}>{knight.name}</div>
                     <span className={cx("card-level")}>Level {knight.level}</span>
                     <div className={cx("card-description")}>
-                      <span>Gender: {knight.gender == "0" ? "Male" : "Female"}</span>
+                      <div>Dna: {knight.dna}</div>
                       <span>
-                        Attack Time: <CountDownTime time={knight.readyTime}> </CountDownTime>
+                        Attack Time: <CountDownTime time={knight.attackTime}> </CountDownTime>
+                      </span>
+                      <span>
+                        Sex Time: <CountDownTime time={knight.sexTime}> </CountDownTime>
                       </span>
                     </div>
-                    <button className={cx("card-button")} onClick={() => handleShowModal(knight.dna)}>
-                      Sale
-                    </button>
                   </div>
                 </div>
               )

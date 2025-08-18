@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react"
 import style from "./Profile.module.scss"
 import ahir from "../../assets/images/ahir-png.png"
 import FormCreateKnight from "../../components/reuse/FormCreateKnight/FromCreateKnight"
@@ -7,43 +6,12 @@ import { useAppSelector } from "../../redux/hook"
 import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
-import KnightApi from "../../api/KnightApi"
 
 const cx = classNames.bind(style)
 
 function Profile() {
-  interface DataKnight {
-    _id: string
-    name: string
-    owner: string
-    knightID: number
-    tokenURI: string
-    dna: string
-    image: string
-    createdAt: string
-    updatedAt: string
-    attackTime: number
-    level: number
-    lostCount: number
-    sexTime: number
-    winCount: number
-  }
-  const [KnightsOfOwner, setKnightOwner] = useState<DataKnight[]>([])
-  const wallet = useAppSelector((state) => state.wallet.value)
+  const { knightsOwner, wallet } = useAppSelector((state) => state)
   const { contract } = useWeb3()
-  useEffect(() => {
-    if (wallet) {
-      KnightApi.getAll({ owner: wallet })
-        .then((result: any) => {
-          setKnightOwner(result.knightsOfOwner)
-        })
-        .catch((err: any) => {
-          console.log(err)
-        })
-    } else {
-      setKnightOwner([])
-    }
-  }, [wallet, contract])
   return (
     <div className={cx("profile")}>
       <div className={cx("container")}>
@@ -88,9 +56,9 @@ function Profile() {
                 </ul>
               </div>
             </div>
-            {KnightsOfOwner?.length == 0 && wallet ? <FormCreateKnight></FormCreateKnight> : " "}
-            {KnightsOfOwner?.length != 0 ? <ListKnight data={KnightsOfOwner}></ListKnight> : ""}
-            {wallet == "" ? <ButtonConnect></ButtonConnect> : ""}
+            {knightsOwner?.value.length == 0 && wallet.value != "" ? <FormCreateKnight></FormCreateKnight> : " "}
+            {knightsOwner?.value.length != 0 ? <ListKnight data={knightsOwner.value}></ListKnight> : ""}
+            {wallet.value == "" ? <ButtonConnect></ButtonConnect> : ""}
           </div>
         </div>
         <div className={cx("aside-left")}>

@@ -165,9 +165,9 @@
   {
     "anonymous": false,
     "inputs": [
-      { "indexed": false, "internalType": "bool", "name": "", "type": "bool" },
-      { "indexed": false, "internalType": "uint256", "name": "_luckyNumber", "type": "uint256" },
-      { "indexed": false, "internalType": "uint256", "name": "_victoryNumber", "type": "uint256" }
+      { "indexed": false, "internalType": "bool", "name": "_result", "type": "bool" },
+      { "indexed": false, "internalType": "uint256", "name": "_knightWin", "type": "uint256" },
+      { "indexed": false, "internalType": "uint256", "name": "_knightLose", "type": "uint256" }
     ],
     "name": "battleResults",
     "type": "event"
@@ -200,7 +200,7 @@
       { "internalType": "uint256", "name": "_defenseKnightID", "type": "uint256" }
     ],
     "name": "attack",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },

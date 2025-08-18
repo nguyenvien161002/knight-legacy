@@ -2,14 +2,12 @@ import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { IconProp, IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import { faHeart, faArrowRight, faUserCircle, faCloudUpload, faShoppingCart } from "@fortawesome/free-solid-svg-icons"
-import {} from "@fortawesome/free-regular-svg-icons"
 import classNames from "classnames/bind"
 import style from "./Home.module.scss"
 import banner__right from "../../assets/images/meocho.png"
 import banner__left from "../../assets/images/team-meo.png"
 import kata from "../../assets/images/kata.png"
 import yi from "../../assets/images/yi.png"
-import ahir from "../../assets/images/ahir-png.png"
 import talon from "../../assets/images/talon.png"
 import yone from "../../assets/images/yone-1.png"
 import nha from "../../assets/images/nha.png"
@@ -27,6 +25,7 @@ import { useWeb3, useMetamark } from "../../provider"
 import KnightApi from "../../api/KnightApi"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import { useAppSelector } from "../../redux/hook"
+
 const cx = classNames.bind(style)
 const faHeartIC = faHeart as IconDefinition
 const faArrowRightIC = faArrowRight as IconDefinition
@@ -39,12 +38,14 @@ function Home() {
   const { ellipsisAddress } = useMetamark()
   const wallet = useAppSelector((state) => state.wallet.value)
   interface DataSaleKnight {
-    bidID: string
     knightID: string
     owner: string
     price: string
+    bidID: string
     createdAt: string
     image: string
+    name: string
+    timeEnd: number
   }
   const [saleKnights, setSaleKnights] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
   const [render, setRender] = useState(false)
@@ -68,6 +69,7 @@ function Home() {
   useEffect(() => {
     KnightApi.getSaleKnight({})
       .then((data: any) => {
+        console.log(data)
         setSaleKnights(data.listSaleKnight)
       })
       .catch((error) => {
@@ -127,18 +129,18 @@ function Home() {
         <div className={cx("bg__gradient-content")}>
           {saleKnights.length > 0
             ? saleKnights.map((knight) => {
-                let bidend = new Date(knight.createdAt).getTime() / 1000
                 return (
                   <div key={knight.bidID} className={cx("bg__gradient-item")}>
                     <div>
                       <img src={knight.image} width="300" alt="" className={cx("product__image")} />
                     </div>
                     <div className={cx("product__time")}>
-                      <CountDownTime time={bidend}></CountDownTime>
+                      <CountDownTime time={knight.timeEnd}></CountDownTime>
                     </div>
+                    <div className={cx("product__name")}>{knight.name}</div>
                     <div className={cx("product__info")}>
                       <h3 className={cx("product__price")}>
-                        {web3.utils.fromWei(knight?.price?.toString() || "0", "ether")} ETH <span>1/20</span>
+                        {web3.utils.fromWei(knight.price.toString(), "ether")} ETH <span>1/20</span>
                       </h3>
                       <h3>
                         Bid ID <span>{knight.bidID}</span>
