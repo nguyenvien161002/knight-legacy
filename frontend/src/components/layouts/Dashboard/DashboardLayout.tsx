@@ -13,16 +13,15 @@ import {
   faSignOut,
   faSearch,
   faHammer,
-  faChildren,
 } from "@fortawesome/free-solid-svg-icons"
-import { faBell } from "@fortawesome/free-regular-svg-icons"
+import { faBell, faLifeRing } from "@fortawesome/free-regular-svg-icons"
 import logo from "../../../assets/images/logo-dashboard.png"
 import classNames from "classnames/bind"
 import style from "./DashboardLayout.module.scss"
 import ButtonConnect from "../../reuse/ButtonConnect/ButtonConnect"
 const cx = classNames.bind(style)
 const faBellIC = faBell as IconDefinition
-const faAnngleIC = faAngleDown as IconDefinition
+const faLifeRingIC = faLifeRing as IconDefinition
 const faHomeLgIC = faHomeLg as IconDefinition
 const faStoreIC = faStore as IconDefinition
 const faCreditCardIC = faCreditCard as IconDefinition
@@ -32,7 +31,6 @@ const faCogIC = faCog as IconDefinition
 const faSignOutIC = faSignOut as IconDefinition
 const faSearchIC = faSearch as IconDefinition
 const faHammerIC = faHammer as IconDefinition
-const faChildrenIC = faChildren as IconDefinition
 
 function DefaultLayout() {
   return (
@@ -89,7 +87,14 @@ function DefaultLayout() {
               {" "}
               <Link to={"/wedding"}>
                 {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faChildrenIC} />{" "}
+                <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
+              </Link>{" "}
+            </li>
+            <li className={cx(["list__item"])}>
+              {" "}
+              <Link to={"/request-marriage"}>
+                {" "}
+                <FontAwesomeIcon className={cx("marriage")} icon={faLifeRingIC} />{" "}
               </Link>{" "}
             </li>
           </ul>
