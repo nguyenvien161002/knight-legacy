@@ -4,10 +4,12 @@
   padding: 50px;
   display: flex;
   justify-content: flex-start;
-
   flex-wrap: wrap;
   .card {
     margin-left: 25px;
+    a {
+      color: white;
+    }
   }
   .card {
     margin-bottom: 40px;
@@ -51,6 +53,10 @@
         font-weight: 600;
         color: #dc21a2;
         margin-bottom: 8px;
+        max-width: inherit;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
       .card-level {
         display: inline-block;

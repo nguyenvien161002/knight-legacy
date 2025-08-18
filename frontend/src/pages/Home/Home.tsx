@@ -25,7 +25,7 @@ import { useWeb3, useMetamark } from "../../provider"
 import KnightApi from "../../api/KnightApi"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import { useAppSelector } from "../../redux/hook"
-
+import { DataSaleKnight } from "../../type"
 const cx = classNames.bind(style)
 const faHeartIC = faHeart as IconDefinition
 const faArrowRightIC = faArrowRight as IconDefinition
@@ -37,16 +37,6 @@ function Home() {
   const { contract, web3 } = useWeb3()
   const { ellipsisAddress } = useMetamark()
   const wallet = useAppSelector((state) => state.wallet.value)
-  interface DataSaleKnight {
-    knightID: string
-    owner: string
-    price: string
-    bidID: string
-    createdAt: string
-    image: string
-    name: string
-    timeEnd: number
-  }
   const [saleKnights, setSaleKnights] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
   const [render, setRender] = useState(false)
   useEffect(() => {
@@ -131,25 +121,27 @@ function Home() {
             ? saleKnights.map((knight) => {
                 return (
                   <div key={knight.bidID} className={cx("bg__gradient-item")}>
-                    <div>
-                      <img src={knight.image} width="300" alt="" className={cx("product__image")} />
-                    </div>
-                    <div className={cx("product__time")}>
-                      <CountDownTime time={knight.timeEnd}></CountDownTime>
-                    </div>
-                    <div className={cx("product__name")}>{knight.name}</div>
-                    <div className={cx("product__info")}>
-                      <h3 className={cx("product__price")}>
-                        {web3.utils.fromWei(knight.price.toString(), "ether")} ETH <span>1/20</span>
-                      </h3>
-                      <h3>
-                        Bid ID <span>{knight.bidID}</span>
-                      </h3>
-                    </div>
-                    <div className={cx("product__owner")}>
-                      <img src={yone} alt="" />
-                      <span>{ellipsisAddress(knight.owner)}</span>
-                    </div>
+                    <a href={knight.permaLink} target="_bank">
+                      <div>
+                        <img src={knight.image} width="300" alt="" className={cx("product__image")} />
+                      </div>
+                      <div className={cx("product__time")}>
+                        <CountDownTime time={knight.timeEnd}></CountDownTime>
+                      </div>
+                      <div className={cx("product__name")}>{knight.name}</div>
+                      <div className={cx("product__info")}>
+                        <h3 className={cx("product__price")}>
+                          {web3.utils.fromWei(knight.price.toString(), "ether")} ETH <span>1/20</span>
+                        </h3>
+                        <h3>
+                          Bid ID <span>{knight.bidID}</span>
+                        </h3>
+                      </div>
+                      <div className={cx("product__owner")}>
+                        <img src={yone} alt="" />
+                        <span>{ellipsisAddress(knight.owner)}</span>
+                      </div>
+                    </a>
                     <div className={cx("product__btn-buy")}>
                       <button onClick={() => handleBuyKnight(knight.bidID, knight.price)}>
                         Place a Bid <FontAwesomeIcon icon={faArrowRightIC} />{" "}
