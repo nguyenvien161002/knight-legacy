@@ -1,3 +1,4 @@
+import Carousel from "react-bootstrap/Carousel"
 import style from "./Profile.module.scss"
 import ahir from "../../assets/images/ahir-png.png"
 import FormCreateKnight from "../../components/reuse/FormCreateKnight/FromCreateKnight"
@@ -6,9 +7,74 @@ import { useAppSelector } from "../../redux/hook"
 import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
+import { url } from "inspector"
 
 const cx = classNames.bind(style)
-
+function IndividualIntervalsExample() {
+  return (
+    <div className={cx("banner")}>
+      <Carousel>
+        <Carousel.Item interval={4000}>
+          <div className={cx("banner-content")}>
+            <div className={cx("content")}>
+              <h1>Round Hall</h1>
+              <h2>1.5 ETH</h2>
+              <h3>Uploaded by Alexander Vernof</h3>
+              <div className={cx("banner-time")}>
+                <a href="" style={{ "--clr": "#dc21a2" } as React.CSSProperties}>
+                  <span>Bid now</span>
+                  <i></i>
+                </a>
+                <div className={cx("time-paragraph")}>
+                  <p>Ending In</p>
+                  <p>2d:15h:20m</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Carousel.Item>
+        <Carousel.Item interval={4000}>
+          <div className={cx("banner-content")}>
+            <div className={cx("content")}>
+              <h1>Round Hall</h1>
+              <h2>1.5 ETH</h2>
+              <h3>Uploaded by Alexander Vernof</h3>
+              <div className={cx("banner-time")}>
+                <a href="" style={{ "--clr": "#dc21a2" } as React.CSSProperties}>
+                  <span>Bid now</span>
+                  <i></i>
+                </a>
+                <div className={cx("time-paragraph")}>
+                  <p>Ending In</p>
+                  <p>2d:15h:20m</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Carousel.Item>
+        <Carousel.Item interval={4000}>
+          <div className={cx("banner-content")}>
+            <div className={cx("content")}>
+              <h1>Round Hall</h1>
+              <h2>1.5 ETH</h2>
+              <h3>Uploaded by Alexander Vernof</h3>
+              <div className={cx("banner-time")}>
+                <a href="" style={{ "--clr": "#dc21a2" } as React.CSSProperties}>
+                  <span>Bid now</span>
+                  <i></i>
+                </a>
+                <div className={cx("time-paragraph")}>
+                  <p>Ending In</p>
+                  <p>2d:15h:20m</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Carousel.Item>
+      </Carousel>
+    </div>
+  )
+}
 function Profile() {
   const { knightsOwner, wallet } = useAppSelector((state) => state)
   const { contract } = useWeb3()
@@ -16,20 +82,25 @@ function Profile() {
     <div className={cx("profile")}>
       <div className={cx("container")}>
         <div className={cx("content")}>
-          <div className={cx("banner")}>
-            <h1 className={cx("banner__heading", "banner__item")}>Round Hall</h1>
-            <h1 className={cx("banner__price", "banner__item", "color-global")}>1.5 ETH</h1>
-            <p className={cx("banner__info", "banner__item")}>Upload By Alenxander Vernof</p>
-            <div className={cx("banner__submit", "banner__item")}>
-              <a href="#" className={cx("card-button", "active", "shadow")}>
-                Bid Now
-              </a>
-              <div className={cx("banner__expr")}>
-                <p>
-                  Ending In <span className={cx("color-global")}>2d:15h:20m</span>
-                </p>
-              </div>
-            </div>
+          <div className={cx("carousel-container")}>
+            <IndividualIntervalsExample />
+            {/* <div className={cx('banner')}>
+                        <h1 className={cx('banner__heading', 'banner__item')}>
+                            Round Hall
+                        </h1>
+                        <h1 className={cx('banner__price', 'banner__item', 'color-global')}>
+                            1.5 ETH
+                        </h1>
+                        <p className={cx('banner__info', 'banner__item')}>
+                            Upload By Alenxander Vernof
+                        </p>
+                        <div className={cx('banner__submit', 'banner__item')}>
+                            <a href="#" className={cx('card-button', 'active', 'shadow')}>Bid Now</a>
+                            <div className={cx('banner__expr')}>
+                                <p>Ending In <span className={cx('color-global')}>2d:15h:20m</span></p>
+                            </div>                   
+                        </div>
+                    </div> */}
           </div>
           <div className={cx("content__profile")}>
             <div className={cx("feed")}>
