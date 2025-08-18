@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, ReactNode } from "react"
 import { Modal, Button } from "react-bootstrap"
 import ThemeProvider from "react-bootstrap/ThemeProvider"
 import classNames from "classnames/bind"
@@ -31,8 +31,7 @@ function Attack() {
         setKnightNotOwner(res.knightsNotOwner)
       })
       .catch((error) => console.log(error))
-  }, [wallet])
-
+  }, [wallet.value])
   useEffect(() => {
     const modalAttackDom = document.getElementsByClassName("modal-content") as HTMLCollectionOf<HTMLElement>
     if (modalAttackDom.length > 0) {
@@ -83,21 +82,24 @@ function Attack() {
       <div className={cx("container")}>
         {KnightsNotOwner.map((knight) => (
           <div className={cx("card")} key={knight.dna}>
-            <img src={knight.image} alt="" className={cx("card-img")} />
-            <div className={cx("card-id")}> ID: {knight.knightID}</div>
+            <a href={knight.permaLink} target="_blank">
+              <img src={knight.image} alt="" className={cx("card-img")} />
+              <div className={cx("card-id")}> ID: {knight.knightID}</div>
+
+              <div className={cx("card-data")}>
+                <div className={cx("card-title")}>{knight.name}</div>
+                <span className={cx("card-level")}>Level {knight.level}</span>
+                <div className={cx("card-description")}>
+                  <div>Dna: {knight.dna}</div>
+                  <div>Win count: {knight.winCount}</div>
+                  <div>Lost count: {knight.lostCount}</div>
+                  <div>Onwer: {ellipsisAddress(knight.owner)}</div>
+                </div>
+              </div>
+            </a>
             <button className={cx("card-button")} onClick={() => handleShowModal(true, knight)}>
               Attack
             </button>
-            <div className={cx("card-data")}>
-              <div className={cx("card-title")}>{knight.name}</div>
-              <span className={cx("card-level")}>Level {knight.level}</span>
-              <div className={cx("card-description")}>
-                <div>Dna: {knight.dna}</div>
-                <div>Win count: {knight.winCount}</div>
-                <div>Lost count: {knight.lostCount}</div>
-                <div>Onwer: {ellipsisAddress(knight.owner)}</div>
-              </div>
-            </div>
           </div>
         ))}
       </div>
@@ -129,30 +131,38 @@ function Attack() {
             </div>
             <h1>VS</h1>
             <div className={cx("list-owner")}>
-              {knightsOwner.value.map((knight) => (
-                <div
-                  className={cx("card", knight.knightID === myKnight?.knightID ? "active" : "")}
-                  onClick={() => setMyKnight(knight)}
-                  key={knight._id}
-                >
-                  <h3 className={cx("title")}>{knight.name}</h3>
-                  <div className={cx("attack-time")}>
-                    <CountDownTime time={knight.attackTime}></CountDownTime>
+              {knightsOwner.value
+                .filter((knight) => {
+                  const now = Math.floor(new Date().getTime() / 1000)
+                  if (knight.attackTime >= now) {
+                    return false
+                  }
+                  return true
+                })
+                .map((knight) => (
+                  <div
+                    className={cx("card", knight.knightID === myKnight?.knightID ? "active" : "")}
+                    onClick={() => setMyKnight(knight)}
+                    key={knight._id}
+                  >
+                    <h3 className={cx("title")}>{knight.name}</h3>
+                    <div className={cx("attack-time")}>
+                      <CountDownTime time={knight.attackTime}></CountDownTime>
+                    </div>
+                    <div className={cx("info")}>
+                      <div className={cx("level")}> Level: {knight?.level}</div>
+                      <div className={cx("win-count")}> Win: {knight?.winCount}</div>
+                      <div className={cx("lost-count")}> Lost: {knight?.lostCount}</div>
+                    </div>
+                    <div className={cx("bar")}>
+                      <div className={cx("emptybar")}></div>
+                      <div className={cx("filledbar")}></div>
+                    </div>
+                    <div className={cx("circle")}>
+                      <img src={knight.image} alt="" className={cx("card-img")} />
+                    </div>
                   </div>
-                  <div className={cx("info")}>
-                    <div className={cx("level")}> Level: {selectedKnight?.level}</div>
-                    <div className={cx("win-count")}> Win: {selectedKnight?.winCount}</div>
-                    <div className={cx("lost-count")}> Lost: {selectedKnight?.lostCount}</div>
-                  </div>
-                  <div className={cx("bar")}>
-                    <div className={cx("emptybar")}></div>
-                    <div className={cx("filledbar")}></div>
-                  </div>
-                  <div className={cx("circle")}>
-                    <img src={knight.image} alt="" className={cx("card-img")} />
-                  </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
           <div className={cx("btn-container")}>

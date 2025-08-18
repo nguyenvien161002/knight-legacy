@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react"
-import { Modal } from "react-bootstrap"
+import { Button, Modal } from "react-bootstrap"
 import ThemeProvider from "react-bootstrap/ThemeProvider"
 import classNames from "classnames/bind"
 import { useWeb3 } from "../../provider"
 import { useAppSelector } from "../../redux/hook"
 import style from "./SaleKnight.module.scss"
-import ahir from "../../assets/images/ahir-png.png"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
-import KnightApi from "../../api/KnightApi"
 const cx = classNames.bind(style)
 
 function SaleKnight() {
@@ -20,39 +18,9 @@ function SaleKnight() {
     price: "",
     time: "3600",
   })
-  interface DataKnight {
-    _id: string
-    name: string
-    owner: string
-    knightID: number
-    tokenURI: string
-    dna: string
-    image: string
-    createdAt: string
-    updatedAt: string
-    attackTime: number
-    level: number
-    lostCount: number
-    sexTime: number
-    winCount: number
-  }
-  const [KnightsOfOwner, setKnightOwner] = useState<DataKnight[]>([])
+  const { knightsOwner, wallet } = useAppSelector((state) => state)
   const [knightID, setKnightID] = useState(0)
-  const wallet = useAppSelector((state) => state.wallet.value)
   const { contract, web3 } = useWeb3()
-  useEffect(() => {
-    if (wallet) {
-      KnightApi.getAll({ owner: wallet })
-        .then((result: any) => {
-          setKnightOwner(result.knightsOfOwner)
-        })
-        .catch((err: any) => {
-          console.log(err)
-        })
-    } else {
-      setKnightOwner([])
-    }
-  }, [wallet, contract])
   const handleInput = (e: any) => {
     setInputKnight({
       ...inputKnight,
@@ -63,42 +31,46 @@ function SaleKnight() {
     e.preventDefault()
     contract?.methods
       .saleKnight(knightID.toString(), web3.utils.toWei(inputKnight.price.toString(), "ether"), inputKnight.time)
-      .send({ from: wallet })
+      .send({ from: wallet.value })
       .then((data: any) => console.log(data))
       .catch((err: any) => console.log(err))
   }
-  const handleShowModal = (id: string) => {
+  const handleShowModal = (id: number) => {
     setModalShow(true)
-    const params = { id }
-    KnightApi.getKnightById(params).then((data: any) => {
-      setKnightID(data.knightsOfOwner.knightID)
-    })
+    setKnightID(id)
   }
   return (
     <ThemeProvider breakpoints={["xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">
       <div className={cx("container")}>
-        {KnightsOfOwner
-          ? KnightsOfOwner.map((knight) => {
+        {knightsOwner.value
+          ? knightsOwner.value.map((knight) => {
               return (
                 <div className={cx("card")} key={knight.dna}>
-                  <img src={knight.image} alt="" className={cx("card-img")} />
-                  <div className={cx("card-id")}> ID: {knight.knightID}</div>
-                  <button className={cx("card-button")} onClick={() => handleShowModal(knight.dna)}>
-                    Sale
-                  </button>
-                  <div className={cx("card-data")}>
-                    <div className={cx("card-title")}>{knight.name}</div>
-                    <span className={cx("card-level")}>Level {knight.level}</span>
-                    <div className={cx("card-description")}>
-                      <div>Dna: {knight.dna}</div>
-                      <span>
-                        Attack Time: <CountDownTime time={knight.attackTime}> </CountDownTime>
-                      </span>
-                      <span>
-                        Sex Time: <CountDownTime time={knight.sexTime}> </CountDownTime>
-                      </span>
+                  <a href={knight.permaLink} target="_blank">
+                    <img src={knight.image} alt="" className={cx("card-img")} />
+                    <div className={cx("card-id")}> ID: {knight.knightID}</div>
+
+                    <div className={cx("card-data")}>
+                      <div className={cx("card-title")}>{knight.name}</div>
+                      <span className={cx("card-level")}>Level {knight.level}</span>
+                      <div className={cx("card-description")}>
+                        <div>Dna: {knight.dna}</div>
+                        <span>
+                          Attack Time: <CountDownTime time={knight.attackTime}> </CountDownTime>
+                        </span>
+                        <span>
+                          Sex Time: <CountDownTime time={knight.sexTime}> </CountDownTime>
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  </a>
+                  {knight.isSalling ? (
+                    <Button className={cx("card-button")}> Knight is Salling </Button>
+                  ) : (
+                    <button className={cx("card-button")} onClick={() => handleShowModal(knight.knightID)}>
+                      Sale
+                    </button>
+                  )}
                 </div>
               )
             })
