@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react"
-import { Modal } from "react-bootstrap"
+import { Modal, Button } from "react-bootstrap"
 import style from "./ListKnight.module.scss"
 import classNames from "classnames/bind"
 import CountDownTime from "../CountDownTime/CountDownTime"
 import { DataKnight } from "../../../type"
-import { useMetamark } from "../../../provider"
+import { useMetamark, useWeb3 } from "../../../provider"
+import { useAppSelector, useAppDispatch } from "../../../redux/hook"
+import { getKnightsOfOwner } from "../../../redux/KnightsOwnerReducer"
+import { Loading } from "notiflix"
+import knightApi from "../../../api/KnightApi"
 const cx = classNames.bind(style)
 
 type Props = {
@@ -13,14 +17,55 @@ type Props = {
 
 const ListKnight = ({ data }: Props) => {
   const { ellipsisAddress } = useMetamark()
-
+  const wallet = useAppSelector((state) => state.wallet.value)
+  const dispatch = useAppDispatch()
   const [show, setShow] = useState(false)
   const [oldName, setOldName] = useState("")
   const [newName, setNewName] = useState("")
+  const [knightID, setKnightID] = useState(0)
+  const { contract } = useWeb3()
   const handleClose = () => setShow(false)
-  const handleShow = (nameKnight: any) => {
+  const handleShow = (nameKnight: any, knightID: number) => {
     setShow(true)
     setOldName(nameKnight)
+    setKnightID(knightID)
+  }
+  const handleChangeName = () => {
+    setShow(!show)
+    Loading.arrows("Handle change name...")
+    contract.methods
+      .changeName(knightID.toString(), newName)
+      .send({ from: wallet })
+      .then((data: any) => {
+        Loading.remove()
+        return knightApi.changeName({ knightID, newName })
+      })
+      .then((dataSave: any) => {
+        console.log(dataSave)
+        dispatch(getKnightsOfOwner(wallet))
+      })
+      .catch((error: any) => {
+        console.log(error)
+        Loading.remove()
+      })
+  }
+  const handleLevelUp = (knightID: number) => {
+    Loading.arrows("Handle level up knight...")
+    contract.methods
+      .levelUp(knightID.toString())
+      .send({ from: wallet, value: "1000000000000000" })
+      .then((data: any) => {
+        Loading.remove()
+        return knightApi.levelUp({ knightID })
+      })
+      .then((dataSave: any) => {
+        console.log(dataSave)
+        dispatch(getKnightsOfOwner(wallet))
+      })
+      .catch((error: any) => {
+        console.log(error)
+        Loading.remove()
+      })
   }
 
   return (
@@ -60,12 +105,21 @@ const ListKnight = ({ data }: Props) => {
                   </div>
                 </div>
               </a>
-              <div className={cx("card-submit", "flex-card")}>
-                <button className={cx("card-button", "active")} onClick={() => handleShow(knight.name)}>
-                  Change name
-                </button>
-                <button className={cx("card-button")}>Level up</button>
-              </div>
+              {wallet.toLowerCase() == knight.owner ? (
+                <div className={cx("card-submit", "flex-card")}>
+                  <button
+                    className={cx("card-button", "active", "change-name")}
+                    onClick={() => handleShow(knight.name, knight.knightID)}
+                  >
+                    Change name
+                  </button>
+                  <button className={cx("card-button", "level-up")} onClick={() => handleLevelUp(knight.knightID)}>
+                    Level up
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         )
@@ -75,7 +129,7 @@ const ListKnight = ({ data }: Props) => {
           <Modal.Body>
             <div className={cx("modal-container")}>
               <div className={cx("inputBox")}>
-                <input required={true} value={oldName} />
+                <input required={true} value={oldName} readOnly />
                 <span>Old Name</span>
               </div>
               <div className={cx("inputBox")}>
@@ -83,7 +137,9 @@ const ListKnight = ({ data }: Props) => {
                 <span>New Name</span>
               </div>
               <div className={cx("inputBox")}>
-                <button className={cx("form-submit")}>Change name</button>
+                <button className={cx("form-submit")} onClick={handleChangeName}>
+                  Change name
+                </button>
               </div>
             </div>
           </Modal.Body>
