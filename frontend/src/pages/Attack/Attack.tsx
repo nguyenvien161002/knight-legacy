@@ -178,7 +178,9 @@ function Attack() {
           <img src={resoultAttack ? victory : lose} alt="" />
           <h3 className={cx("notifi")}>
             {" "}
-            Congratulations to your knight on victory <br /> visit profile to get new knight{" "}
+            {resoultAttack
+              ? "Congratulations to your knight on victory <br/> visit profile to get new knight"
+              : "Failed challenge, upgrade your knight and go back to battle!"}{" "}
           </h3>
           <Button className={cx("btn-accept")} onClick={() => setModalAttack(!modalAttack)}>
             {" "}

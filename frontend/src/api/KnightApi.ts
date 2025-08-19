@@ -29,6 +29,10 @@ const authorizationApi = {
     const url = `v1/api/knight/request-marri`
     return axiosClient.put(url, params)
   },
+  destroyMarry: (params: any) => {
+    const url = `v1/api/knight/request-marri`
+    return axiosClient.delete(url, { params })
+  },
 }
 
 export default authorizationApi

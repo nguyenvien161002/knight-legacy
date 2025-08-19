@@ -35,6 +35,14 @@ function SaleKnight() {
       .then((data: any) => console.log(data))
       .catch((err: any) => console.log(err))
   }
+  const handleDestroySale = (e: any, bidID: string) => {
+    e.preventDefault()
+    contract?.methods
+      .destroySaleKnight(bidID)
+      .send({ from: wallet.value })
+      .then((data: any) => console.log(data))
+      .catch((err: any) => console.log(err))
+  }
   const handleShowModal = (id: number) => {
     setModalShow(true)
     setKnightID(id)
@@ -44,6 +52,7 @@ function SaleKnight() {
       <div className={cx("container")}>
         {knightsOwner.value
           ? knightsOwner.value.map((knight) => {
+              let now = Math.floor(new Date().getTime() / 1000)
               return (
                 <div className={cx("card")} key={knight.dna}>
                   <a href={knight.permaLink} target="_blank">
@@ -64,12 +73,28 @@ function SaleKnight() {
                       </div>
                     </div>
                   </a>
-                  {knight.isSalling ? (
+                  {knight.isSalling && now < knight?.saleInfo[0]?.timeEnd ? (
                     <Button className={cx("card-button")}> Knight is Salling </Button>
                   ) : (
+                    ""
+                  )}
+                  {now > knight?.saleInfo[0]?.timeEnd && knight.isSalling ? (
+                    <Button
+                      className={cx("card-button")}
+                      onClick={(e) => handleDestroySale(e, knight?.saleInfo[0]?.bidID)}
+                    >
+                      {" "}
+                      Destroy Sale Knight
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                  {knight.isSalling == false ? (
                     <button className={cx("card-button")} onClick={() => handleShowModal(knight.knightID)}>
                       Sale
                     </button>
+                  ) : (
+                    ""
                   )}
                 </div>
               )
