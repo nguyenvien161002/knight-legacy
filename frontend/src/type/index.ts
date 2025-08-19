@@ -15,7 +15,7 @@ export interface DataKnight {
   winCount: number
   isSalling: boolean
   permaLink: string
-  saleInfo: DataSaleKnight[]
+  saleKnight: DataSaleKnight
 }
 // table Knight
 

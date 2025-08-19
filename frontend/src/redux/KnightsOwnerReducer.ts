@@ -37,7 +37,10 @@ export const getKnightsOfOwner = createAsyncThunk(
     } else {
       const knights = await knightApi
         .getAll({ owner })
-        .then((res: any) => res.knightsOfOwner)
+        .then((res: any) => {
+          console.log(res.data)
+          return res.data
+        })
         .catch((error: any) => {
           console.log(error)
           return []

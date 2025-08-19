@@ -117,40 +117,28 @@ function Home() {
       </section>
       <section className={cx("bg__content-center")}>
         <div className={cx("bg__gradient-content")}>
-          {saleKnights.length > 0
-            ? saleKnights.map((knight) => {
-                return (
-                  <div key={knight.bidID} className={cx("bg__gradient-item")}>
-                    <a href={knight.permaLink} target="_bank">
-                      <div>
-                        <img src={knight.image} width="300" alt="" className={cx("product__image")} />
-                      </div>
-                      <div className={cx("product__time")}>
-                        <CountDownTime time={knight.timeEnd}></CountDownTime>
-                      </div>
-                      <div className={cx("product__name")}>{knight.name}</div>
-                      <div className={cx("product__info")}>
-                        <h3 className={cx("product__price")}>
-                          {web3.utils.fromWei(knight.price.toString(), "ether")} ETH <span>1/20</span>
-                        </h3>
-                        <h3>
-                          Bid ID <span>{knight.bidID}</span>
-                        </h3>
-                      </div>
-                      <div className={cx("product__owner")}>
-                        <img src={yone} alt="" />
-                        <span>{ellipsisAddress(knight.owner)}</span>
-                      </div>
-                    </a>
-                    <div className={cx("product__btn-buy")}>
-                      <button onClick={() => handleBuyKnight(knight.bidID, knight.price)}>
-                        Place a Bid <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                      </button>
-                    </div>
-                  </div>
-                )
-              })
-            : " "}
+          {/* {saleKnights?.length > 0 ? saleKnights.map((knight)=> {
+                    return (
+                        <div key={knight.bidID} className={cx('bg__gradient-item')}>
+                            <a href={knight.permaLink} target="_bank">
+                                <div><img src={knight.image} width="300"  alt="" className={cx('product__image')} /></div>
+                                <div className={cx('product__time')}><CountDownTime time={knight.timeEnd}></CountDownTime></div>
+                                <div className={cx('product__name')}>{knight.name}</div>
+                                <div className={cx('product__info')}>
+                                    <h3 className={cx('product__price')}>{web3.utils.fromWei((knight.price).toString(), "ether")} ETH <span>1/20</span></h3>
+                                    <h3>Bid ID <span>{knight.bidID}</span></h3>
+                                </div>
+                                <div className={cx('product__owner')}>
+                                    <img src={yone} alt="" />
+                                    <span>{ellipsisAddress(knight.owner)}</span>
+                                </div>
+                            </a>
+                            <div className={cx('product__btn-buy')}>
+                                <button onClick={() => handleBuyKnight(knight.bidID, knight.price)} >Place a Bid <FontAwesomeIcon icon={faArrowRightIC}/> </button>
+                            </div>
+                        </div>
+                    )
+                }) : " "} */}
         </div>
         <div className={cx("intro__team-dev")}>
           <h2>HOW WE WORK</h2>
