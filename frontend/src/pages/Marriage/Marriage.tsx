@@ -16,7 +16,7 @@ const cx = classNames.bind(style)
 function Marriage() {
   const { wallet } = useAppSelector((state) => state)
   const { contract, web3 } = useWeb3()
-  const [requestMarry, setRequestMarry] = useState<any>()
+  const [requestMarry, setRequestMarry] = useState<DataRequestMarry[]>()
   const [render, setRender] = useState(false)
   useEffect(() => {
     knightApi
@@ -120,6 +120,8 @@ function Marriage() {
 
     return timeOne <= now && timeTwo <= now
   }
+
+  console.log(requestMarry)
 
   return (
     <div className={cx("profile")}>
