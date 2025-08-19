@@ -4,7 +4,7 @@ import Web3Modal from "web3modal"
 import { upload } from "../../redux/walletReducer"
 import { useAppDispatch } from "../../redux/hook"
 interface AuthContext {
-  connectWallet: () => Promise<void>
+  connectWallet: () => Promise<string | undefined>
   refreshState: () => void
   disconnect: () => Promise<void>
   ellipsisAddress: (address: string) => string | null
@@ -33,7 +33,7 @@ const MetamarkProvider = ({ children }: Props) => {
     }
   }
 
-  const connectWallet = async () => {
+  const connectWallet = async (): Promise<string | undefined> => {
     try {
       const provider = await web3Modal.connect()
       const library = new Web3(provider)
@@ -43,9 +43,11 @@ const MetamarkProvider = ({ children }: Props) => {
       if (accounts) {
         dispatch(upload(accounts[0]))
         localStorage.setItem("wallet", accounts[0])
+        return accounts[0]
       }
     } catch (error) {
       console.error(error)
+      return ""
     }
   }
   const refreshState = () => {

@@ -26,7 +26,7 @@ import KnightApi from "../../api/KnightApi"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import { useAppSelector } from "../../redux/hook"
 import { DataSaleKnight } from "../../type"
-import { Loading } from "notiflix"
+import { Loading, Notify } from "notiflix"
 const cx = classNames.bind(style)
 const faHeartIC = faHeart as IconDefinition
 const faArrowRightIC = faArrowRight as IconDefinition
@@ -36,7 +36,7 @@ const faShoppingCartIC = faShoppingCart as IconDefinition
 
 function Home() {
   const { contract, web3 } = useWeb3()
-  const { ellipsisAddress } = useMetamark()
+  const { ellipsisAddress, connectWallet } = useMetamark()
   const wallet = useAppSelector((state) => state.wallet.value)
   const [saleKnights, setSaleKnights] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
   const [render, setRender] = useState(false)
@@ -83,16 +83,32 @@ function Home() {
 
   const handleBuyKnight = (bidID: string, value: string) => {
     Loading.arrows("Handle buy knight...")
-    contract?.methods
+    console.log(wallet)
+    if (wallet == undefined) {
+      console.log("nowallet")
+      connectWallet()
+        .then((data) => {
+          console.log(data)
+          buyKnight(bidID, value, data)
+        })
+        .catch((error: any) => Notify.warning(" Please Connect Metamark!"))
+    } else {
+      buyKnight(bidID, value, wallet)
+    }
+  }
+  const buyKnight = (bidID: string, value: string, wallet: string | undefined) => {
+    contract.methods
       .buyKnight(bidID)
       .send({ from: wallet, value })
       .then((data: any) => {
+        console.log(data)
         setRender(!render)
         Loading.remove()
         KnightApi.destroySaleKnight({ bidID, newOwner: wallet })
       })
       .catch((err: any) => {
         setRender(!render)
+        console.log(err)
         Loading.remove()
       })
   }
