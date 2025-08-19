@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { Modal } from "react-bootstrap"
 import style from "./ListKnight.module.scss"
 import classNames from "classnames/bind"
 import CountDownTime from "../CountDownTime/CountDownTime"
@@ -12,6 +13,16 @@ type Props = {
 
 const ListKnight = ({ data }: Props) => {
   const { ellipsisAddress } = useMetamark()
+
+  const [show, setShow] = useState(false)
+  const [oldName, setOldName] = useState("")
+  const [newName, setNewName] = useState("")
+  const handleClose = () => setShow(false)
+  const handleShow = (nameKnight: any) => {
+    setShow(true)
+    setOldName(nameKnight)
+  }
+
   return (
     <div className={cx("card-container")}>
       {data?.map((knight) => {
@@ -50,13 +61,34 @@ const ListKnight = ({ data }: Props) => {
                 </div>
               </a>
               <div className={cx("card-submit", "flex-card")}>
-                <button className={cx("card-button", "active")}>Details info</button>
-                <button className={cx("card-button")}>History</button>
+                <button className={cx("card-button", "active")} onClick={() => handleShow(knight.name)}>
+                  Change name
+                </button>
+                <button className={cx("card-button")}>Level up</button>
               </div>
             </div>
           </div>
         )
       })}
+      <>
+        <Modal show={show} onHide={handleClose} aria-labelledby="contained-modal-title-vcenter" centered>
+          <Modal.Body>
+            <div className={cx("modal-container")}>
+              <div className={cx("inputBox")}>
+                <input required={true} value={oldName} />
+                <span>Old Name</span>
+              </div>
+              <div className={cx("inputBox")}>
+                <input required={true} onChange={(e) => setNewName(e.target.value)} />
+                <span>New Name</span>
+              </div>
+              <div className={cx("inputBox")}>
+                <button className={cx("form-submit")}>Change name</button>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </>
     </div>
   )
 }
