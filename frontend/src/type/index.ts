@@ -1,5 +1,5 @@
 export interface DataKnight {
-  _id: string // k cần nè
+  _id: string
   name: string
   owner: string
   knightID: number
@@ -18,7 +18,6 @@ export interface DataKnight {
   saleKnight: DataSaleKnight
   maritalStatus: boolean
 }
-// table Knight
 
 export interface DataSaleKnight {
   knightID: string
@@ -39,4 +38,9 @@ export interface DataRequestMarry {
   knightResponse: DataKnight
   status: string
 }
-// table sale kinght
+
+export interface InforTranferKnight {
+  knightID: number
+  sender: string
+  receiver: string
+}

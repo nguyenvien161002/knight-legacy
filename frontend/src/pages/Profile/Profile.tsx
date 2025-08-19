@@ -1,13 +1,18 @@
 import Carousel from "react-bootstrap/Carousel"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import style from "./Profile.module.scss"
 import ahir from "../../assets/images/ahir-png.png"
 import FormCreateKnight from "../../components/reuse/FormCreateKnight/FromCreateKnight"
 import { useWeb3 } from "../../provider"
-import { useAppSelector } from "../../redux/hook"
+import { useAppSelector, useAppDispatch } from "../../redux/hook"
+import { Form, Button } from "react-bootstrap"
 import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
+import { InforTranferKnight } from "../../type"
+import { Loading } from "notiflix"
+import knightApi from "../../api/KnightApi"
+import { getKnightsOfOwner } from "../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
 function IndividualIntervalsExample() {
   return (
@@ -77,29 +82,61 @@ function IndividualIntervalsExample() {
 function Profile() {
   const { knightsOwner, wallet } = useAppSelector((state) => state)
   const { contract } = useWeb3()
+  const [inforTranfer, setInforTranfer] = useState<InforTranferKnight>({
+    sender: wallet.value,
+    receiver: "",
+    knightID: 0,
+  })
+
+  const dispatch = useAppDispatch()
+
+  const handelInput = (e: any) => {
+    setInforTranfer({
+      ...inforTranfer,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleTranfer = (e: any) => {
+    e.preventDefault()
+    Loading.arrows("Handle tranfer knight...")
+    contract.methods
+      .transferFrom(inforTranfer.sender.trim(), inforTranfer.receiver.trim(), inforTranfer.knightID.toString())
+      .send({ from: wallet.value })
+      .then((data: any) => {
+        Loading.remove()
+        return knightApi.tranfer({ knightID: inforTranfer.knightID, newOwner: inforTranfer.receiver.trim() })
+      })
+      .then((dataSave: any) => {
+        dispatch(getKnightsOfOwner(wallet.value))
+        console.log(dataSave)
+      })
+      .catch((error: any) => {
+        Loading.remove()
+      })
+  }
+  const handleApprove = (e: any) => {
+    e.preventDefault()
+    Loading.arrows("Handle tranfer knight...")
+    contract.methods
+      .approve(inforTranfer.receiver.trim(), inforTranfer.knightID.toString())
+      .send({ from: wallet.value })
+      .then((data: any) => {
+        Loading.remove()
+        // return knightApi.tranfer({knightID: inforTranfer.knightID, newOwner: inforTranfer.receiver.trim()});
+      })
+      .then((dataSave: any) => console.log(dataSave))
+      .catch((error: any) => {
+        Loading.remove()
+      })
+  }
+  console.log(inforTranfer)
   return (
     <div className={cx("profile")}>
       <div className={cx("container")}>
         <div className={cx("content")}>
           <div className={cx("carousel-container")}>
             <IndividualIntervalsExample />
-            {/* <div className={cx('banner')}>
-                        <h1 className={cx('banner__heading', 'banner__item')}>
-                            Round Hall
-                        </h1>
-                        <h1 className={cx('banner__price', 'banner__item', 'color-global')}>
-                            1.5 ETH
-                        </h1>
-                        <p className={cx('banner__info', 'banner__item')}>
-                            Upload By Alenxander Vernof
-                        </p>
-                        <div className={cx('banner__submit', 'banner__item')}>
-                            <a href="#" className={cx('card-button', 'active', 'shadow')}>Bid Now</a>
-                            <div className={cx('banner__expr')}>
-                                <p>Ending In <span className={cx('color-global')}>2d:15h:20m</span></p>
-                            </div>                   
-                        </div>
-                    </div> */}
           </div>
           <div className={cx("content__profile")}>
             <div className={cx("feed")}>
@@ -193,6 +230,59 @@ function Profile() {
               <a href="#">Follow</a>
             </div>
           </div>
+          {wallet.value ? (
+            <div className={cx("tranfer")}>
+              <div className={cx("list-seller__heading")}>
+                <h1>Transfer Knight</h1>
+              </div>
+              {/* Seller item 1 */}
+              <div className={cx("")}>
+                <Form>
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Label>From:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      onChange={handelInput}
+                      name="sender"
+                      defaultValue={wallet.value}
+                      className={cx("input-address")}
+                      placeholder="Enter addreass sender knight..."
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Label>To:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      onChange={handelInput}
+                      name="receiver"
+                      className={cx("input-address")}
+                      placeholder="Enter addreass receiver knight..."
+                    />
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                    <Form.Label>knight ID:</Form.Label>
+                    <Form.Control
+                      type="text"
+                      onChange={handelInput}
+                      name="knightID"
+                      className={cx("input-address")}
+                      placeholder="Enter knight id..."
+                    />
+                  </Form.Group>
+                  <Button className={cx("btn-tranfer", "tranfer-from")} onClick={handleTranfer}>
+                    {" "}
+                    Transfer{" "}
+                  </Button>
+                  <Button className={cx("btn-tranfer", "tranfer-approve")} onClick={handleApprove}>
+                    {" "}
+                    Approve{" "}
+                  </Button>
+                </Form>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </div>

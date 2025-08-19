@@ -66,6 +66,10 @@ const authorizationApi = {
     const url = `v1/api/knight/trigger-tired`
     return axiosClient.post(url, params)
   },
+  tranfer: (params: any) => {
+    const url = `v1/api/knight/tranfer`
+    return axiosClient.post(url, params)
+  },
 }
 
 export default authorizationApi
