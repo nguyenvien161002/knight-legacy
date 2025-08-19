@@ -1,5 +1,5 @@
 export interface DataKnight {
-  _id: string
+  _id: string // k cần nè
   name: string
   owner: string
   knightID: number
@@ -15,7 +15,9 @@ export interface DataKnight {
   winCount: number
   isSalling: boolean
   permaLink: string
+  saleInfo: DataSaleKnight[]
 }
+// table Knight
 
 export interface DataSaleKnight {
   knightID: string
@@ -28,3 +30,16 @@ export interface DataSaleKnight {
   timeEnd: number
   permaLink: string
 }
+
+export interface DataRequestMarry {
+  amountGift: string
+  id: string
+  idKnightRequest: number
+  idKnightResponse: number
+  ownerRequest: string
+  ownerResponse: string
+  request: DataKnight[]
+  response: DataKnight[]
+  status: string
+}
+// table sale kinght

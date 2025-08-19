@@ -13,8 +13,10 @@ import {
   faSignOut,
   faSearch,
   faHammer,
+  faChildren,
 } from "@fortawesome/free-solid-svg-icons"
 import { faBell, faLifeRing } from "@fortawesome/free-regular-svg-icons"
+
 import logo from "../../../assets/images/logo-dashboard.png"
 import classNames from "classnames/bind"
 import style from "./DashboardLayout.module.scss"
@@ -31,6 +33,7 @@ const faCogIC = faCog as IconDefinition
 const faSignOutIC = faSignOut as IconDefinition
 const faSearchIC = faSearch as IconDefinition
 const faHammerIC = faHammer as IconDefinition
+const faChildrenIC = faChildren as IconDefinition
 
 function DefaultLayout() {
   return (
@@ -87,7 +90,7 @@ function DefaultLayout() {
               {" "}
               <Link to={"/wedding"}>
                 {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
+                <FontAwesomeIcon className={cx("store")} icon={faChildrenIC} />{" "}
               </Link>{" "}
             </li>
             <li className={cx(["list__item"])}>
