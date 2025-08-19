@@ -1,4 +1,5 @@
 import Carousel from "react-bootstrap/Carousel"
+import { useEffect } from "react"
 import style from "./Profile.module.scss"
 import ahir from "../../assets/images/ahir-png.png"
 import FormCreateKnight from "../../components/reuse/FormCreateKnight/FromCreateKnight"
@@ -7,8 +8,6 @@ import { useAppSelector } from "../../redux/hook"
 import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
-import { url } from "inspector"
-
 const cx = classNames.bind(style)
 function IndividualIntervalsExample() {
   return (

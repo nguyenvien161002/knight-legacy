@@ -3,6 +3,7 @@ import style from "./ListKnight.module.scss"
 import classNames from "classnames/bind"
 import CountDownTime from "../CountDownTime/CountDownTime"
 import { DataKnight } from "../../../type"
+import { useMetamark } from "../../../provider"
 const cx = classNames.bind(style)
 
 type Props = {
@@ -10,11 +11,12 @@ type Props = {
 }
 
 const ListKnight = ({ data }: Props) => {
+  const { ellipsisAddress } = useMetamark()
   return (
     <div className={cx("card-container")}>
       {data?.map((knight) => {
         return (
-          <div key={knight.dna} className={cx("card-item")}>
+          <div key={knight._id} className={cx("card-item")}>
             <div className={cx("card-image")}>
               <img src={knight.image} height="100%" alt="" />
             </div>
@@ -25,6 +27,10 @@ const ListKnight = ({ data }: Props) => {
                   <h3>{knight.knightID}</h3>
                 </div>
                 <div className={cx("card-info")}>
+                  <div className={cx("info")}>
+                    <h4> Owner: </h4>
+                    <p> {ellipsisAddress(knight.owner)}</p>
+                  </div>
                   <div className={cx("info")}>
                     <h4> Dna </h4>
                     <p> {knight.dna}</p>

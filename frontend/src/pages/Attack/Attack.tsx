@@ -7,11 +7,12 @@ import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import knightApi from "../../api/KnightApi"
 import lose from "../../assets/images/lose.png"
 import victory from "../../assets/images/victory.png"
-import { useAppSelector } from "../../redux/hook"
+import { useAppSelector, useAppDispatch } from "../../redux/hook"
 import { useMetamark, useWeb3 } from "../../provider"
 import { Loading } from "notiflix/build/notiflix-loading-aio"
 import { Notify } from "notiflix"
 import { DataKnight } from "../../type"
+import { getKnightsOfOwner } from "../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
 
 function Attack() {
@@ -24,6 +25,7 @@ function Attack() {
   const { wallet, knightsOwner } = useAppSelector((state) => state)
   const { ellipsisAddress } = useMetamark()
   const { contract } = useWeb3()
+  const dispatch = useAppDispatch()
   useEffect(() => {
     knightApi
       .getKnightNotOwwner({ owner: wallet.value })
@@ -61,14 +63,40 @@ function Attack() {
         .then((data: any) => {
           console.log(data)
           setModalAttack(!modalAttack)
-          if (data.events.battleResults.returnValues[0] == true) {
+          if (data.events.battleResults.returnValues._result == true) {
             console.log("attack win")
             setResoultAttack(true)
           } else {
             console.log("attack lose")
             setResoultAttack(false)
           }
+          if (data.events.NewKnight) {
+            const params = {
+              name: data.events.NewKnight.returnValues.name,
+              dna: data.events.NewKnight.returnValues.dna,
+              knightID: data.events.NewKnight.returnValues.knightID,
+              level: data.events.NewKnight.returnValues.level,
+              attackTime: data.events.NewKnight.returnValues.readyTime,
+              sexTime: data.events.NewKnight.returnValues.sexTime,
+              owner: data.events.NewKnight.returnValues.owner.toLowerCase(),
+              tokenURI: data.events.NewKnight.returnValues.tokenURI,
+            }
+            knightApi
+              .storeKnight(params)
+              .then((response) => dispatch(getKnightsOfOwner(wallet.value)))
+              .catch((erorr: any) => console.log(erorr))
+          }
+
           Loading.remove()
+          knightApi.battleResults({
+            result: data.events.battleResults.returnValues._result,
+            idKnightWin: data.events.battleResults.returnValues._knightWin,
+            idKnightLose: data.events.battleResults.returnValues._knightLose,
+          })
+          knightApi.triggerCoolDown({
+            knightID: data.events.TriggerCoolDown.returnValues._knightID,
+            timeOut: data.events.TriggerCoolDown.returnValues._timeOut,
+          })
         })
         .catch((error: any) => {
           console.log(error)
@@ -81,7 +109,7 @@ function Attack() {
     <ThemeProvider breakpoints={["xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">
       <div className={cx("container")}>
         {KnightsNotOwner.map((knight) => (
-          <div className={cx("card")} key={knight.dna}>
+          <div className={cx("card")} key={knight._id}>
             <a href={knight.permaLink} target="_blank">
               <img src={knight.image} alt="" className={cx("card-img")} />
               <div className={cx("card-id")}> ID: {knight.knightID}</div>

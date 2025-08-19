@@ -6,6 +6,10 @@ import { useWeb3 } from "../../provider"
 import { useAppSelector } from "../../redux/hook"
 import style from "./SaleKnight.module.scss"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
+import knightApi from "../../api/KnightApi"
+import { Loading } from "notiflix"
+import { useAppDispatch } from "../../redux/hook"
+import { getKnightsOfOwner } from "../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
 
 function SaleKnight() {
@@ -21,6 +25,7 @@ function SaleKnight() {
   const { knightsOwner, wallet } = useAppSelector((state) => state)
   const [knightID, setKnightID] = useState(0)
   const { contract, web3 } = useWeb3()
+  const dispatch = useAppDispatch()
   const handleInput = (e: any) => {
     setInputKnight({
       ...inputKnight,
@@ -29,19 +34,47 @@ function SaleKnight() {
   }
   const saleKnight = (e: any) => {
     e.preventDefault()
+    Loading.arrows("Handle sale knight...")
     contract?.methods
       .saleKnight(knightID.toString(), web3.utils.toWei(inputKnight.price.toString(), "ether"), inputKnight.time)
       .send({ from: wallet.value })
-      .then((data: any) => console.log(data))
-      .catch((err: any) => console.log(err))
+      .then((data: any) => {
+        const params = {
+          knightID: data.events.SaleKnight.returnValues.knightID,
+          price: data.events.SaleKnight.returnValues.price,
+          bidID: data.events.SaleKnight.returnValues.bidID,
+          timeEnd: data.events.SaleKnight.returnValues.timeEnd,
+        }
+        return knightApi.storeSaleKnight(params)
+      })
+      .then((data: any) => {
+        setModalShow(false)
+        dispatch(getKnightsOfOwner(wallet.value))
+        Loading.remove()
+      })
+      .catch((err: any) => {
+        console.log(err)
+        Loading.remove()
+      })
   }
   const handleDestroySale = (e: any, bidID: string) => {
     e.preventDefault()
+    Loading.arrows("Handle destroy sale knight...")
     contract?.methods
       .destroySaleKnight(bidID)
       .send({ from: wallet.value })
-      .then((data: any) => console.log(data))
-      .catch((err: any) => console.log(err))
+      .then((data: any) => {
+        return knightApi.destroySaleKnight(bidID)
+      })
+      .then((data: any) => {
+        setModalShow(false)
+        dispatch(getKnightsOfOwner(wallet.value))
+        Loading.remove()
+      })
+      .catch((err: any) => {
+        console.log(err)
+        Loading.remove()
+      })
   }
   const handleShowModal = (id: number) => {
     setModalShow(true)
