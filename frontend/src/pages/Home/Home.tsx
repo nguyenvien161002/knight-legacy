@@ -27,6 +27,7 @@ import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import { useAppSelector } from "../../redux/hook"
 import { DataSaleKnight } from "../../type"
 import { Loading, Notify } from "notiflix"
+import SaleKnight from "../Saleknight/Saleknight"
 const cx = classNames.bind(style)
 const faHeartIC = faHeart as IconDefinition
 const faArrowRightIC = faArrowRight as IconDefinition
@@ -39,6 +40,8 @@ function Home() {
   const { ellipsisAddress, connectWallet } = useMetamark()
   const wallet = useAppSelector((state) => state.wallet.value)
   const [saleKnights, setSaleKnights] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
+  const [saleMaxKnight, setSaleMaxKnight] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
+  const [saleMediumKnight, setSaleMediumKnight] = useState<DataSaleKnight[]>({} as DataSaleKnight[])
   const [render, setRender] = useState(false)
   useEffect(() => {
     setTimeout(() => {
@@ -68,7 +71,29 @@ function Home() {
         console.log(error)
       })
   }, [render])
+  useEffect(() => {
+    KnightApi.getMaxSale({})
+      .then((res: any) => {
+        console.log(res)
+        setSaleMaxKnight(res.data)
+      })
+      .catch((error) => {
+        setSaleMaxKnight([])
+        console.log(error)
+      })
+  }, [render])
 
+  useEffect(() => {
+    KnightApi.getMediumSale({})
+      .then((res: any) => {
+        console.log(res)
+        setSaleMediumKnight(res.data)
+      })
+      .catch((error) => {
+        setSaleMediumKnight([])
+        console.log(error)
+      })
+  }, [render])
   // useEffect(() => {
   //     contract?.methods.getInitKnight(wallet).call()
   //     .then((data : any) => {
@@ -243,147 +268,86 @@ function Home() {
           <h3>RECENT CHARACTER</h3>
           <div className={cx("intro__character-box")}>
             <div className={cx("intro__character-outstanding")}>
-              <div className={cx("intro__character-item")}>
-                <div className={cx("intro__character-img")}>
-                  <img src={medusa} width="300" alt="" className={cx("product__image")} />
-                  <ul className={cx("product__skill")}>
-                    <li className="intro__character-skill">
-                      <img src={q} width="20" alt="" />
-                    </li>
-                    <li className="intro__character-skill">
-                      <img src={w} width="20" alt="" />
-                    </li>
-                    <li className="intro__character-skill">
-                      <img src={p} width="20" alt="" />
-                    </li>
-                    <li className="intro__character-skill">
-                      <img src={e} width="20" alt="" />
-                    </li>
-                  </ul>
-                </div>
-                <div className={cx("product__time")}>6d 15h 34m 30s</div>
-                <div className={cx("product__info")}>
-                  <h3 className={cx("product__price")}>
-                    0.08ETH <span>1/20</span>
-                  </h3>
-                  <h3>
-                    {" "}
-                    <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> <span>56</span>
-                  </h3>
-                </div>
-                <div className={cx("product__owner")}>
-                  <img src={yone} alt="" width="50" />
-                  <span>@Knight_nft.pro</span>
-                </div>
-                <div className={cx("product__btn-buy")}>
-                  <button>
-                    Place a Bid <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                  </button>
-                </div>
-              </div>
+              {saleMaxKnight.length > 0
+                ? saleMaxKnight?.map((maxknight) => {
+                    return (
+                      <div className={cx("intro__character-item")}>
+                        <div className={cx("intro__character-img")}>
+                          <img src={maxknight.knight.image} width="300" alt="" className={cx("product__image")} />
+                          {/* <ul className={cx('product__skill')}>
+                                                <li className="intro__character-skill">
+                                                    <img src={q} width="20" alt="" />
+                                                </li>
+                                                <li className="intro__character-skill">
+                                                    <img src={w} width="20" alt="" />
+                                                </li>
+                                                <li className="intro__character-skill">
+                                                    <img src={p} width="20" alt="" />
+                                                </li>
+                                                <li className="intro__character-skill">
+                                                    <img src={e} width="20" alt="" />
+                                                </li>
+                                            </ul> */}
+                        </div>
+                        <div className={cx("product__time")}>
+                          <CountDownTime time={maxknight.timeEnd}></CountDownTime>
+                        </div>
+                        <div className={cx("product__info")}>
+                          <h3 className={cx("product__price")}>
+                            {web3.utils.fromWei(maxknight.price)} ETH <span> ID: {maxknight.knightID}</span>
+                          </h3>
+                          <h3>
+                            {" "}
+                            <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> <span>56</span>
+                          </h3>
+                        </div>
+                        <div className={cx("product__owner")}>
+                          <img src={yone} alt="" width="50" />
+                          <span>{ellipsisAddress(maxknight.knight.owner)}</span>
+                        </div>
+                        <div className={cx("product__btn-buy")}>
+                          <button onClick={() => handleBuyKnight(maxknight.bidID, maxknight.price)}>
+                            Place a Bid <FontAwesomeIcon icon={faArrowRightIC} />{" "}
+                          </button>
+                        </div>
+                      </div>
+                    )
+                  })
+                : ""}
             </div>
             <div className={cx("intro__character-narmal")}>
               <ul className={cx("intro__character-list")}>
-                <li className={cx("intro__character-item")}>
-                  <div className={cx("intro__character-img")}>
-                    <img src={gwen} alt="" width={40} />
-                  </div>
-                  <div className={cx("intro__character-user")}>
-                    <div className={cx("intro__character-info")}>
-                      <img src={yone} alt="" width={40} />
-                      <p> @Knight.nft.pro</p>
-                    </div>
-                    <div className={cx("intro__character-price")}>
-                      0.08 ETH <span> 1/20</span>
-                    </div>
-                    <div className={cx("intro__character-like")}>
-                      <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> 100
-                    </div>
-                  </div>
-                  <div className={cx("intro__character-btn")}>
-                    <div>
-                      <button>
-                        {" "}
-                        Bib <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                      </button>
-                    </div>
-                  </div>
-                </li>
-                <li className={cx("intro__character-item")}>
-                  <div className={cx("intro__character-img")}>
-                    <img src={liang} alt="" width={40} />
-                  </div>
-                  <div className={cx("intro__character-user")}>
-                    <div className={cx("intro__character-info")}>
-                      <img src={talon} alt="" width={40} />
-                      <p> @Knight.nft.pro</p>
-                    </div>
-                    <div className={cx("intro__character-price")}>
-                      0.08 ETH <span> 1/20</span>
-                    </div>
-                    <div className={cx("intro__character-like")}>
-                      <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> 100
-                    </div>
-                  </div>
-                  <div className={cx("intro__character-btn")}>
-                    <div>
-                      <button>
-                        {" "}
-                        Bib <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                      </button>
-                    </div>
-                  </div>
-                </li>
-                <li className={cx("intro__character-item")}>
-                  <div className={cx("intro__character-img")}>
-                    <img src={liang1} alt="" width={40} />
-                  </div>
-                  <div className={cx("intro__character-user")}>
-                    <div className={cx("intro__character-info")}>
-                      <img src={kata} alt="" width={40} />
-                      <p> @Knight.nft.pro</p>
-                    </div>
-                    <div className={cx("intro__character-price")}>
-                      0.08 ETH <span> 1/20</span>
-                    </div>
-                    <div className={cx("intro__character-like")}>
-                      <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> 100
-                    </div>
-                  </div>
-                  <div className={cx("intro__character-btn")}>
-                    <div>
-                      <button>
-                        {" "}
-                        Bib <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                      </button>
-                    </div>
-                  </div>
-                </li>
-                <li className={cx("intro__character-item")}>
-                  <div className={cx("intro__character-img")}>
-                    <img src={liang2} alt="" width={40} />
-                  </div>
-                  <div className={cx("intro__character-user")}>
-                    <div className={cx("intro__character-info")}>
-                      <img src={yi} alt="" width={40} />
-                      <p> @Knight.nft.pro</p>
-                    </div>
-                    <div className={cx("intro__character-price")}>
-                      0.08 ETH <span> 1/20</span>
-                    </div>
-                    <div className={cx("intro__character-like")}>
-                      <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> 100
-                    </div>
-                  </div>
-                  <div className={cx("intro__character-btn")}>
-                    <div>
-                      <button>
-                        {" "}
-                        Bib <FontAwesomeIcon icon={faArrowRightIC} />{" "}
-                      </button>
-                    </div>
-                  </div>
-                </li>
+                {saleMediumKnight.length > 0
+                  ? saleMediumKnight.map((mediumKnight) => {
+                      return (
+                        <li className={cx("intro__character-item")}>
+                          <div className={cx("intro__character-img")}>
+                            <img src={mediumKnight.knight.image} alt="" width={40} />
+                          </div>
+                          <div className={cx("intro__character-user")}>
+                            <div className={cx("intro__character-info")}>
+                              <img src={yone} alt="" width={40} />
+                              <p> {ellipsisAddress(mediumKnight.knight.owner)}</p>
+                            </div>
+                            <div className={cx("intro__character-price")}>
+                              {web3.utils.fromWei(mediumKnight.price)} ETH <span> ID: {mediumKnight.knightID}</span>
+                            </div>
+                            <div className={cx("intro__character-like")}>
+                              <FontAwesomeIcon className={cx("icon")} icon={faHeartIC} /> 100
+                            </div>
+                          </div>
+                          <div className={cx("intro__character-btn")}>
+                            <div>
+                              <button onClick={() => handleBuyKnight(mediumKnight.bidID, mediumKnight.price)}>
+                                {" "}
+                                Bib <FontAwesomeIcon icon={faArrowRightIC} />{" "}
+                              </button>
+                            </div>
+                          </div>
+                        </li>
+                      )
+                    })
+                  : ""}
               </ul>
             </div>
           </div>

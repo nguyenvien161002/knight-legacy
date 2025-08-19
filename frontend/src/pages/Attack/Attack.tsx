@@ -88,15 +88,24 @@ function Attack() {
           }
 
           Loading.remove()
-          knightApi.battleResults({
-            result: data.events.battleResults.returnValues._result,
-            idKnightWin: Number(data.events.battleResults.returnValues._knightWin),
-            idKnightLose: Number(data.events.battleResults.returnValues._knightLose),
-          })
-          knightApi.triggerCoolDown({
-            knightID: Number(data.events.TriggerCoolDown.returnValues._knightID),
-            timeOut: Number(data.events.TriggerCoolDown.returnValues._timeOut),
-          })
+          knightApi
+            .battleResults({
+              result: data.events.battleResults.returnValues._result,
+              idKnightWin: Number(data.events.battleResults.returnValues._knightWin),
+              idKnightLose: Number(data.events.battleResults.returnValues._knightLose),
+            })
+            .then((dataSave: any) => {
+              return knightApi.triggerCoolDown({
+                knightID: Number(data.events.TriggerCoolDown.returnValues._knightID),
+                timeOut: Number(data.events.TriggerCoolDown.returnValues._timeOut),
+              })
+            })
+            .then((dataUpdate: any) => {
+              console.log(dataUpdate)
+            })
+            .catch((error) => {
+              console.log(error)
+            })
         })
         .catch((error: any) => {
           console.log(error)

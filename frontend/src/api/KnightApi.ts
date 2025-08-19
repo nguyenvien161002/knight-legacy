@@ -5,6 +5,14 @@ const authorizationApi = {
     const url = `v1/api/knight/all`
     return axiosClient.get(url, { params })
   },
+  getMaxSale: (params: any) => {
+    const url = `v1/api/knight/sale-knight-biggest`
+    return axiosClient.get(url, { params })
+  },
+  getMediumSale: (params: any) => {
+    const url = `v1/api/knight/sale-knight-after-biggest`
+    return axiosClient.get(url, { params })
+  },
   getAllKnightByOwner: (params: any) => {
     const url = `v1/api/knight/get-all`
     return axiosClient.get(url, { params })
