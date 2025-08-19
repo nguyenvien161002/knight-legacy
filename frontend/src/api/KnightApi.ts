@@ -9,6 +9,15 @@ const authorizationApi = {
     const url = `v1/api/knight/sale-knight`
     return axiosClient.get(url, { params })
   },
+  storeSaleKnight: (params: any) => {
+    const url = `v1/api/knight/sale-knight`
+    return axiosClient.post(url, params)
+  },
+  destroySaleKnight: (params: any) => {
+    const url = `v1/api/knight/sale-knight`
+    return axiosClient.delete(url, { params })
+  },
+
   getKnightById: (params: any) => {
     const url = `v1/api/knight/get-knight-id`
     return axiosClient.get(url, { params })
@@ -35,6 +44,26 @@ const authorizationApi = {
   },
   storeKnight: (params: any) => {
     const url = `v1/api/knight/store`
+    return axiosClient.post(url, params)
+  },
+  levelUp: (params: any) => {
+    const url = `v1/api/knight/level-up`
+    return axiosClient.post(url, params)
+  },
+  changeName: (params: any) => {
+    const url = `v1/api/knight/change-name`
+    return axiosClient.post(url, params)
+  },
+  battleResults: (params: any) => {
+    const url = `v1/api/knight/battle-result`
+    return axiosClient.post(url, params)
+  },
+  triggerCoolDown: (params: any) => {
+    const url = `v1/api/knight/trigger-cooldown`
+    return axiosClient.post(url, params)
+  },
+  triggerTired: (params: any) => {
+    const url = `v1/api/knight/trigger-tired`
     return axiosClient.post(url, params)
   },
 }

@@ -16,19 +16,16 @@ export interface DataKnight {
   isSalling: boolean
   permaLink: string
   saleKnight: DataSaleKnight
+  maritalStatus: boolean
 }
 // table Knight
 
 export interface DataSaleKnight {
   knightID: string
-  owner: string
   price: string
   bidID: string
-  createdAt: string
-  image: string
-  name: string
   timeEnd: number
-  permaLink: string
+  knight: DataKnight
 }
 
 export interface DataRequestMarry {
@@ -38,8 +35,8 @@ export interface DataRequestMarry {
   idKnightResponse: number
   ownerRequest: string
   ownerResponse: string
-  request: DataKnight[]
-  response: DataKnight[]
+  knightRequest: DataKnight
+  knightResponse: DataKnight
   status: string
 }
 // table sale kinght

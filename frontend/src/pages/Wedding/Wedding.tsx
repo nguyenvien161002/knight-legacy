@@ -53,6 +53,7 @@ function Wedding() {
       Notify.warning("Chose your Knight")
     } else if (parseFloat(amountGift) <= 0.006) {
       console.log(parseFloat(amountGift))
+      handleHiddenModal()
       Notify.warning("Please, enter amount gift more than 0.006 ether")
     } else {
       Loading.arrows("Handle send request marry...")
@@ -92,8 +93,13 @@ function Wedding() {
   return (
     <ThemeProvider breakpoints={["xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">
       <div className={cx("container")}>
-        {KnightsNotOwner.map((knight) => (
-          <div className={cx("card")} key={knight.dna}>
+        {KnightsNotOwner.filter((knight) => {
+          if (knight.maritalStatus === false) {
+            return true
+          }
+          return false
+        }).map((knight) => (
+          <div className={cx("card")} key={knight.knightID}>
             <a href={knight.permaLink} target="_blank">
               <img src={knight.image} alt="" className={cx("card-img")} />
               <div className={cx("card-id")}> ID: {knight.knightID}</div>
@@ -145,11 +151,10 @@ function Wedding() {
             <div className={cx("list-owner")}>
               {knightsOwner.value
                 .filter((knight) => {
-                  const now = Math.floor(new Date().getTime() / 1000)
-                  if (knight.sexTime >= now) {
-                    return false
+                  if (knight.maritalStatus == false) {
+                    return true
                   }
-                  return true
+                  return false
                 })
                 .map((knight) => (
                   <div
