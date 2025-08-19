@@ -6,7 +6,7 @@ const authorizationApi = {
     return axiosClient.get(url, { params })
   },
   getSaleKnight: (params: any) => {
-    const url = `v1/api/knight/get-sale-knight`
+    const url = `v1/api/knight/sale-knight`
     return axiosClient.get(url, { params })
   },
   getKnightById: (params: any) => {
@@ -32,6 +32,10 @@ const authorizationApi = {
   destroyMarry: (params: any) => {
     const url = `v1/api/knight/request-marri`
     return axiosClient.delete(url, { params })
+  },
+  storeKnight: (params: any) => {
+    const url = `v1/api/knight/store`
+    return axiosClient.post(url, params)
   },
 }
 

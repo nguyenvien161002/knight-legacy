@@ -73,15 +73,15 @@ function SaleKnight() {
                       </div>
                     </div>
                   </a>
-                  {knight.isSalling && now < knight?.saleInfo[0]?.timeEnd ? (
+                  {knight.isSalling && now < knight?.saleKnight?.timeEnd ? (
                     <Button className={cx("card-button")}> Knight is Salling </Button>
                   ) : (
                     ""
                   )}
-                  {now > knight?.saleInfo[0]?.timeEnd && knight.isSalling ? (
+                  {now > knight?.saleKnight?.timeEnd && knight.isSalling ? (
                     <Button
                       className={cx("card-button")}
-                      onClick={(e) => handleDestroySale(e, knight?.saleInfo[0]?.bidID)}
+                      onClick={(e) => handleDestroySale(e, knight?.saleKnight?.bidID)}
                     >
                       {" "}
                       Destroy Sale Knight

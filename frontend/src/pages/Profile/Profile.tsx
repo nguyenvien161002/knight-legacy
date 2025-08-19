@@ -127,8 +127,8 @@ function Profile() {
                 </ul>
               </div>
             </div>
-            {knightsOwner?.value.length == 0 && wallet.value != "" ? <FormCreateKnight></FormCreateKnight> : " "}
-            {knightsOwner?.value.length != 0 ? <ListKnight data={knightsOwner.value}></ListKnight> : ""}
+            {knightsOwner?.value?.length == 0 && wallet.value != "" ? <FormCreateKnight></FormCreateKnight> : " "}
+            {knightsOwner?.value?.length != 0 ? <ListKnight data={knightsOwner.value}></ListKnight> : ""}
             {wallet.value == "" ? <ButtonConnect></ButtonConnect> : ""}
           </div>
         </div>
