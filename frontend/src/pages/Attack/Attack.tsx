@@ -30,7 +30,7 @@ function Attack() {
     knightApi
       .getKnightNotOwwner({ owner: wallet.value })
       .then((res: any) => {
-        setKnightNotOwner(res.knightsNotOwner)
+        setKnightNotOwner(res.data)
       })
       .catch((error) => console.log(error))
   }, [wallet.value])
@@ -90,12 +90,12 @@ function Attack() {
           Loading.remove()
           knightApi.battleResults({
             result: data.events.battleResults.returnValues._result,
-            idKnightWin: data.events.battleResults.returnValues._knightWin,
-            idKnightLose: data.events.battleResults.returnValues._knightLose,
+            idKnightWin: Number(data.events.battleResults.returnValues._knightWin),
+            idKnightLose: Number(data.events.battleResults.returnValues._knightLose),
           })
           knightApi.triggerCoolDown({
-            knightID: data.events.TriggerCoolDown.returnValues._knightID,
-            timeOut: data.events.TriggerCoolDown.returnValues._timeOut,
+            knightID: Number(data.events.TriggerCoolDown.returnValues._knightID),
+            timeOut: Number(data.events.TriggerCoolDown.returnValues._timeOut),
           })
         })
         .catch((error: any) => {
@@ -109,7 +109,7 @@ function Attack() {
     <ThemeProvider breakpoints={["xl", "lg", "md", "sm", "xs", "xxs"]} minBreakpoint="xxs">
       <div className={cx("container")}>
         {KnightsNotOwner.map((knight) => (
-          <div className={cx("card")} key={knight._id}>
+          <div className={cx("card")} key={knight.knightID}>
             <a href={knight.permaLink} target="_blank">
               <img src={knight.image} alt="" className={cx("card-img")} />
               <div className={cx("card-id")}> ID: {knight.knightID}</div>
@@ -171,7 +171,7 @@ function Attack() {
                   <div
                     className={cx("card", knight.knightID === myKnight?.knightID ? "active" : "")}
                     onClick={() => setMyKnight(knight)}
-                    key={knight._id}
+                    key={knight.knightID}
                   >
                     <h3 className={cx("title")}>{knight.name}</h3>
                     <div className={cx("attack-time")}>

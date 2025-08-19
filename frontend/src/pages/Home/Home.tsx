@@ -152,7 +152,8 @@ function Home() {
                       <div className={cx("product__name")}>{knight.knight.name}</div>
                       <div className={cx("product__info")}>
                         <h3 className={cx("product__price")}>
-                          {web3.utils.fromWei(knight.price.toString(), "ether")} ETH <span> ID: {knight.knightID}</span>
+                          {web3.utils.fromWei(knight.price.toString(), "ether")} ETH{" "}
+                          <span> ID: {knight.knight.knightID}</span>
                         </h3>
                         <h3>
                           Bid ID: <span>{knight.bidID}</span>
