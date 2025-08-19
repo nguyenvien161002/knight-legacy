@@ -3,10 +3,11 @@ import { useState } from "react"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core"
 import {
-  faAngleDown,
+  faExchangeAlt,
+  faPaw,
+  faHeart,
   faStore,
   faCreditCard,
-  faChartLine,
   faHistory,
   faHomeLg,
   faCog,
@@ -15,7 +16,7 @@ import {
   faHammer,
   faChildren,
 } from "@fortawesome/free-solid-svg-icons"
-import { faBell, faLifeRing } from "@fortawesome/free-regular-svg-icons"
+import { faBell } from "@fortawesome/free-regular-svg-icons"
 
 import logo from "../../../assets/images/logo-dashboard.png"
 import classNames from "classnames/bind"
@@ -23,17 +24,17 @@ import style from "./DashboardLayout.module.scss"
 import ButtonConnect from "../../reuse/ButtonConnect/ButtonConnect"
 const cx = classNames.bind(style)
 const faBellIC = faBell as IconDefinition
-const faLifeRingIC = faLifeRing as IconDefinition
 const faHomeLgIC = faHomeLg as IconDefinition
 const faStoreIC = faStore as IconDefinition
 const faCreditCardIC = faCreditCard as IconDefinition
-const faChartLineIC = faChartLine as IconDefinition
-const faHistoryIC = faHistory as IconDefinition
+const faPawIC = faPaw as IconDefinition
 const faCogIC = faCog as IconDefinition
 const faSignOutIC = faSignOut as IconDefinition
 const faSearchIC = faSearch as IconDefinition
 const faHammerIC = faHammer as IconDefinition
 const faChildrenIC = faChildren as IconDefinition
+const faExchangeAltIC = faExchangeAlt as IconDefinition
+const faHeartIC = faHeart as IconDefinition
 
 function DefaultLayout() {
   return (
@@ -69,21 +70,15 @@ function DefaultLayout() {
               {" "}
               <Link to={"/store"}>
                 {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faChartLineIC} />{" "}
+                <FontAwesomeIcon className={cx("store")} icon={faExchangeAltIC} />{" "}
               </Link>{" "}
             </li>
-            <li className={cx(["list__item"])}>
-              {" "}
-              <Link to={"/store"}>
-                {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faHistoryIC} />{" "}
-              </Link>{" "}
-            </li>
+            {/* <li className={cx(["list__item"])}> <Link to={"/store"}> <FontAwesomeIcon className={cx('store')}   icon={faHistoryIC} /> </Link> </li> */}
             <li className={cx(["list__item"])}>
               {" "}
               <Link to={"/attack"}>
                 {" "}
-                <FontAwesomeIcon className={cx("store")} icon={faHammerIC} />{" "}
+                <FontAwesomeIcon className={cx("store")} icon={faPawIC} />{" "}
               </Link>{" "}
             </li>
             <li className={cx(["list__item"])}>
@@ -97,7 +92,7 @@ function DefaultLayout() {
               {" "}
               <Link to={"/request-marriage"}>
                 {" "}
-                <FontAwesomeIcon className={cx("marriage")} icon={faLifeRingIC} />{" "}
+                <FontAwesomeIcon className={cx("marriage")} icon={faHeartIC} />{" "}
               </Link>{" "}
             </li>
           </ul>
