@@ -27,7 +27,7 @@ function Wedding() {
     knightApi
       .getKnightNotOwwner({ owner: wallet.value })
       .then((res: any) => {
-        setKnightNotOwner(res.knightsNotOwner)
+        setKnightNotOwner(res.data)
       })
       .catch((error) => console.log(error))
   }, [wallet.value])
