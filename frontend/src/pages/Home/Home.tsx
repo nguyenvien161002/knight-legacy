@@ -129,7 +129,7 @@ function Home() {
         console.log(data)
         setRender(!render)
         Loading.remove()
-        KnightApi.destroySaleKnight({ bidID, newOwner: wallet })
+        KnightApi.buyKnight({ bidID, newOwner: wallet })
       })
       .catch((err: any) => {
         setRender(!render)

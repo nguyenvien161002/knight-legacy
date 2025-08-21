@@ -36,8 +36,8 @@ function Marriage() {
       .then((data: any) => {
         if (data.events.ApprovalMarry.returnValues) {
           const params = {
-            idKnightRequest: data.events.ApprovalMarry.returnValues._knightFatherID,
-            idKnightResponse: data.events.ApprovalMarry.returnValues._knightMotherID,
+            idKnightRequest: data.events.ApprovalMarry.returnValues._IDknightRequest,
+            idKnightResponse: data.events.ApprovalMarry.returnValues._IDknightResponse,
           }
           knightApi.updateRequestMarry(params).then((data: any) => setRender(!render))
           Notify.success("Send data success")
@@ -51,6 +51,7 @@ function Marriage() {
         Loading.remove()
       })
   }
+  console.log(requestMarry)
   const handleDestroyMarry = (idKnightRequest: number, idKnightResponse: number) => {
     Loading.arrows("Handle destroy marry...")
     contract.methods
