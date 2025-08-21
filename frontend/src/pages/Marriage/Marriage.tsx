@@ -16,7 +16,7 @@ const cx = classNames.bind(style)
 function Marriage() {
   const { wallet } = useAppSelector((state) => state)
   const { contract, web3 } = useWeb3()
-  const [requestMarry, setRequestMarry] = useState<DataRequestMarry[]>()
+  const [requestMarry, setRequestMarry] = useState<any>()
   const [render, setRender] = useState(false)
   useEffect(() => {
     knightApi
@@ -51,6 +51,7 @@ function Marriage() {
         Loading.remove()
       })
   }
+  console.log(requestMarry)
   const handleDestroyMarry = (idKnightRequest: number, idKnightResponse: number) => {
     Loading.arrows("Handle destroy marry...")
     contract.methods
@@ -120,8 +121,6 @@ function Marriage() {
 
     return timeOne <= now && timeTwo <= now
   }
-
-  console.log(requestMarry)
 
   return (
     <div className={cx("profile")}>

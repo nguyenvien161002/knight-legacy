@@ -72,7 +72,7 @@ const ListKnight = ({ data }: Props) => {
     <div className={cx("card-container")}>
       {data?.map((knight) => {
         return (
-          <div key={knight._id} className={cx("card-item")}>
+          <div key={knight.knightID} className={cx("card-item")}>
             <div className={cx("card-image")}>
               <img src={knight.image} height="100%" alt="" />
             </div>
