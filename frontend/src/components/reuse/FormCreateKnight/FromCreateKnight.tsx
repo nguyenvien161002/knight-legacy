@@ -5,11 +5,15 @@ import classNames from "classnames/bind"
 import style from "./FromCreateKnight.module.scss"
 import robot from "../../../assets/images/robot.gif"
 import KnightApi from "../../../api/KnightApi"
+import { useAppDispatch, useAppSelector } from "../../../redux/hook"
+import { getKnightsOfOwner } from "../../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
 
 function FormCreateKnight() {
   const [show, setShow] = useState(false)
   const [showToast, setShowToast] = useState(false)
+  const wallet = useAppSelector((state) => state.wallet.value)
+  const dispatch = useAppDispatch()
   type DataToast = {
     lable: String
     mesage: string
@@ -57,7 +61,10 @@ function FormCreateKnight() {
             tokenURI: data.events.NewKnight.returnValues.tokenURI,
           }
           KnightApi.storeKnight(params)
-            .then((response) => console.log(response))
+            .then((response) => {
+              dispatch(getKnightsOfOwner(wallet))
+              console.log(response)
+            })
             .catch((err) => console.log(err))
 
           setDataToast({

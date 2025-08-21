@@ -16,7 +16,7 @@ const cx = classNames.bind(style)
 function Marriage() {
   const { wallet } = useAppSelector((state) => state)
   const { contract, web3 } = useWeb3()
-  const [requestMarry, setRequestMarry] = useState<any>()
+  const [requestMarry, setRequestMarry] = useState<DataRequestMarry[]>()
   const [render, setRender] = useState(false)
   useEffect(() => {
     knightApi
@@ -51,7 +51,6 @@ function Marriage() {
         Loading.remove()
       })
   }
-  console.log(requestMarry)
   const handleDestroyMarry = (idKnightRequest: number, idKnightResponse: number) => {
     Loading.arrows("Handle destroy marry...")
     contract.methods
@@ -122,6 +121,8 @@ function Marriage() {
     return timeOne <= now && timeTwo <= now
   }
 
+  console.log(requestMarry)
+
   return (
     <div className={cx("profile")}>
       <div className={cx("container")}>
@@ -135,18 +136,23 @@ function Marriage() {
                     <div className={cx("info-request")}>
                       <h4>{request.status == "Married" ? "Two knights are married" : "Two unmarried knights"}</h4>
                       <p> Amount Gift: {web3.utils.fromWei(request.amountGift, "ether")} ETH </p>
-                      {request.status == "Pending" && request.ownerResponse == wallet.value.toLowerCase() ? (
+                      {request.status == "Pending" &&
+                      request.ownerResponse.toLowerCase() == wallet.value.toLowerCase() ? (
                         <>
                           <Button
                             className={cx("btn-accept")}
-                            onClick={() => handleApproveMarry(request.idKnightRequest, request.idKnightResponse, true)}
+                            onClick={() =>
+                              handleApproveMarry(request.knightRequest.knightID, request.knightResponse.knightID, true)
+                            }
                           >
                             {" "}
                             Accept marriage{" "}
                           </Button>
                           <Button
                             className={cx("btn-reject")}
-                            onClick={() => handleApproveMarry(request.idKnightRequest, request.idKnightResponse, false)}
+                            onClick={() =>
+                              handleApproveMarry(request.knightRequest.knightID, request.knightResponse.knightID, false)
+                            }
                           >
                             {" "}
                             Reject marriage{" "}
@@ -155,11 +161,14 @@ function Marriage() {
                       ) : (
                         ""
                       )}
-                      {(request.ownerRequest == wallet.value.toLowerCase() && request.status == "Pending") ||
+                      {(request.ownerRequest.toLowerCase() == wallet.value.toLowerCase() &&
+                        request.status == "Pending") ||
                       request.status == "Married" ? (
                         <Button
                           className={cx("btn-destroy")}
-                          onClick={() => handleDestroyMarry(request.idKnightRequest, request.idKnightResponse)}
+                          onClick={() =>
+                            handleDestroyMarry(request.knightRequest.knightID, request.knightResponse.knightID)
+                          }
                         >
                           {" "}
                           Destroy marriage
@@ -171,7 +180,9 @@ function Marriage() {
                       isReadySex(request.knightRequest.sexTime, request.knightResponse.sexTime) ? (
                         <Button
                           className={cx("btn-accept")}
-                          onClick={() => handleInterCourse(request.idKnightRequest, request.idKnightResponse)}
+                          onClick={() =>
+                            handleInterCourse(request.knightRequest.knightID, request.knightResponse.knightID)
+                          }
                         >
                           {" "}
                           Intercourse Knight{" "}
