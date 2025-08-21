@@ -5,14 +5,6 @@ const authorizationApi = {
     const url = `v1/api/knight/all`
     return axiosClient.get(url, { params })
   },
-  getMaxSale: (params: any) => {
-    const url = `v1/api/knight/sale-knight-biggest`
-    return axiosClient.get(url, { params })
-  },
-  getMediumSale: (params: any) => {
-    const url = `v1/api/knight/sale-knight-after-biggest`
-    return axiosClient.get(url, { params })
-  },
   getAllKnightByOwner: (params: any) => {
     const url = `v1/api/knight/get-all`
     return axiosClient.get(url, { params })
@@ -39,19 +31,19 @@ const authorizationApi = {
     return axiosClient.get(url, { params })
   },
   getRequestMarry: (params: any) => {
-    const url = `v1/api/knight/request-marri`
+    const url = `v1/api/knight/request-marry`
     return axiosClient.get(url, { params })
   },
   storeRequestMarry: (params: any) => {
-    const url = `v1/api/knight/request-marri`
+    const url = `v1/api/knight/request-marry`
     return axiosClient.post(url, params)
   },
   updateRequestMarry: (params: any) => {
-    const url = `v1/api/knight/request-marri`
+    const url = `v1/api/knight/request-marry`
     return axiosClient.put(url, params)
   },
   destroyMarry: (params: any) => {
-    const url = `v1/api/knight/request-marri`
+    const url = `v1/api/knight/request-marry`
     return axiosClient.delete(url, { params })
   },
   storeKnight: (params: any) => {
