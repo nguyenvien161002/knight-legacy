@@ -3,6 +3,7 @@ import Web3 from "web3"
 import { AbiItem } from "web3-utils"
 import detectEthereumProvider from "@metamask/detect-provider"
 import ABI_KnightNFT from "../../utility/ABI_KnightNFT.json"
+import ConfigEnv from "../../config"
 interface Web3Method {
   contract: any
   web3: any
@@ -17,13 +18,18 @@ const Web3Provider = ({ children }: Props) => {
     web3: null,
   }
   const [web3Api, setWeb3Api] = useState(initValueWeb3)
+  console.log(web3Api)
+
   useEffect(() => {
     const loadProvider = async () => {
       const provider: any = await detectEthereumProvider()
       const web3 = new Web3(provider)
       if (provider) {
         setWeb3Api({
-          contract: new web3.eth.Contract(ABI_KnightNFT as AbiItem[], "0x395c66aAe34511B0D15E979F64c19497981DB7ab"), // Rinkeby Testnet Network
+          contract: new web3.eth.Contract(
+            ABI_KnightNFT as AbiItem[],
+            ConfigEnv.CONTRACT[ConfigEnv.CHAIN_DEFAULT].KnghitNFT,
+          ),
           web3,
         })
       } else {

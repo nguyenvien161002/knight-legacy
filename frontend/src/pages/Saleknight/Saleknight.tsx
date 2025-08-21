@@ -7,7 +7,7 @@ import { useAppSelector } from "../../redux/hook"
 import style from "./SaleKnight.module.scss"
 import CountDownTime from "../../components/reuse/CountDownTime/CountDownTime"
 import knightApi from "../../api/KnightApi"
-import { Loading } from "notiflix"
+import { Loading, Notify } from "notiflix"
 import { useAppDispatch } from "../../redux/hook"
 import { getKnightsOfOwner } from "../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
@@ -32,30 +32,22 @@ function SaleKnight() {
       [e.target.name]: e.target.value,
     })
   }
-  const saleKnight = (e: any) => {
+  const saleKnight = async (e: any) => {
     e.preventDefault()
-    Loading.arrows("Handle sale knight...")
-    contract?.methods
-      .saleKnight(knightID.toString(), web3.utils.toWei(inputKnight.price.toString(), "ether"), inputKnight.time)
-      .send({ from: wallet.value })
-      .then((data: any) => {
-        const params = {
-          knightID: data.events.SaleKnight.returnValues.knightID,
-          price: data.events.SaleKnight.returnValues.price,
-          bidID: data.events.SaleKnight.returnValues.bidID,
-          timeEnd: data.events.SaleKnight.returnValues.timeEnd,
-        }
-        return knightApi.storeSaleKnight(params)
-      })
-      .then((data: any) => {
-        setModalShow(false)
-        dispatch(getKnightsOfOwner(wallet.value))
-        Loading.remove()
-      })
-      .catch((err: any) => {
-        console.log(err)
-        Loading.remove()
-      })
+
+    try {
+      Loading.arrows("Handle sale knight...")
+
+      await contract?.methods
+        .saleKnight(knightID.toString(), web3.utils.toWei(inputKnight.price.toString(), "ether"), inputKnight.time)
+        .send({ from: wallet.value })
+      setModalShow(false)
+      dispatch(getKnightsOfOwner(wallet.value))
+      Loading.remove()
+    } catch (error: any) {
+      Notify.failure(`Sale knight fail: ${error.message}`)
+      Loading.remove()
+    }
   }
   const handleDestroySale = (e: any, bidID: string) => {
     e.preventDefault()
@@ -158,9 +150,9 @@ function SaleKnight() {
                     Time end
                   </label>
                   <select id="time" name="time" onChange={handleInput} className={cx("form-control")}>
-                    <option value="3600">1 hours</option>
-                    <option value="43200"> 12 hours</option>
                     <option value="86400"> 1 days</option>
+                    <option value="604800"> 7 days </option>
+                    <option value="2592000"> 1 month</option>
                   </select>
                 </div>
 

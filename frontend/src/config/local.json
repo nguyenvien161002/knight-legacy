@@ -1,0 +1,11 @@
+{
+    "CHAIN_DEFAULT": 5,
+    "CONTRACT": {
+        "5": {
+            "KnghitNFT": "0xF0edB145C9f8f5608B60B76b06E9080D2eA3488D"
+        },
+        "80001": {
+            "KnghitNFT": "0xF0edB145C9f8f5608B60B76b06E9080D2eA3488D"
+        }
+    }
+}

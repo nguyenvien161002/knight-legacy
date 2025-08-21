@@ -63,12 +63,12 @@ function Home() {
   useEffect(() => {
     KnightApi.getSaleKnight({})
       .then((res: any) => {
-        console.log(res)
+        // console.log(res);
         setSaleKnights(res.data)
       })
       .catch((error) => {
         setSaleKnights([])
-        console.log(error)
+        // console.log(error);
       })
   }, [render])
   useEffect(() => {
@@ -79,19 +79,19 @@ function Home() {
       })
       .catch((error) => {
         setSaleMaxKnight([])
-        console.log(error)
+        // console.log(error);
       })
   }, [render])
 
   useEffect(() => {
     KnightApi.getMediumSale({})
       .then((res: any) => {
-        console.log(res)
+        // console.log(res);
         setSaleMediumKnight(res.data)
       })
       .catch((error) => {
         setSaleMediumKnight([])
-        console.log(error)
+        // console.log(error);
       })
   }, [render])
   // useEffect(() => {
@@ -126,14 +126,14 @@ function Home() {
       .buyKnight(bidID)
       .send({ from: wallet, value })
       .then((data: any) => {
-        console.log(data)
         setRender(!render)
         Loading.remove()
-        KnightApi.buyKnight({ bidID, newOwner: wallet })
+        Notify.success(`Buy knight with bid ${bidID} successfully`)
+        // KnightApi.buyKnight({bidID, newOwner: wallet});
       })
       .catch((err: any) => {
         setRender(!render)
-        console.log(err)
+        Notify.failure(`Buy knight with bid ${bidID} failure`)
         Loading.remove()
       })
   }

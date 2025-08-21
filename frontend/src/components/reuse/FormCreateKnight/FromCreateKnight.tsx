@@ -4,9 +4,9 @@ import { useWeb3 } from "../../../provider"
 import classNames from "classnames/bind"
 import style from "./FromCreateKnight.module.scss"
 import robot from "../../../assets/images/robot.gif"
-import KnightApi from "../../../api/KnightApi"
 import { useAppDispatch, useAppSelector } from "../../../redux/hook"
 import { getKnightsOfOwner } from "../../../redux/KnightsOwnerReducer"
+import { Loading, Notify } from "notiflix"
 const cx = classNames.bind(style)
 
 function FormCreateKnight() {
@@ -44,44 +44,24 @@ function FormCreateKnight() {
   const createKnight = (e: any) => {
     e.preventDefault()
     if (inputKnight.name) {
+      Loading.arrows("Handle create knight...")
       contract.methods
         .createKnight(inputKnight.name, inputKnight.gender)
         .send({
           from: localStorage.getItem("wallet"),
         })
         .then((data: any) => {
-          const params = {
-            name: data.events.NewKnight.returnValues.name,
-            dna: data.events.NewKnight.returnValues.dna,
-            knightID: data.events.NewKnight.returnValues.knightID,
-            level: data.events.NewKnight.returnValues.level,
-            attackTime: data.events.NewKnight.returnValues.readyTime,
-            sexTime: data.events.NewKnight.returnValues.sexTime,
-            owner: data.events.NewKnight.returnValues.owner.toLowerCase(),
-            tokenURI: data.events.NewKnight.returnValues.tokenURI,
-          }
-          KnightApi.storeKnight(params)
-            .then((response) => {
-              dispatch(getKnightsOfOwner(wallet))
-              console.log(response)
-            })
-            .catch((err) => console.log(err))
-
-          setDataToast({
-            lable: " Create knight ",
-            mesage: " Create knight successfully ",
-            time: " just now",
-          })
-          toggleShowTost()
+          setTimeout(() => {
+            Notify.success("Create knight successfully")
+            handleClose()
+            Loading.remove()
+            dispatch(getKnightsOfOwner(wallet))
+          }, 4000)
         })
         .catch((err: any) => {
-          console.log(err)
-          setDataToast({
-            lable: " Create knight ",
-            mesage: " Create knight false! </br> " + err.message,
-            time: " just now",
-          })
-          toggleShowTost()
+          Notify.failure(`Create knight failure! ${err.message}`)
+          Loading.remove()
+          handleClose()
         })
     }
   }
