@@ -72,7 +72,7 @@ const ListKnight = ({ data }: Props) => {
     <div className={cx("card-container")}>
       {data?.map((knight) => {
         return (
-          <div key={knight.knightID} className={cx("card-item")}>
+          <div key={knight._id} className={cx("card-item")}>
             <div className={cx("card-image")}>
               <img src={knight.image} height="100%" alt="" />
             </div>
@@ -83,6 +83,9 @@ const ListKnight = ({ data }: Props) => {
                   <h3>{knight.knightID}</h3>
                 </div>
                 <div className={cx("card-info")}>
+                  <div className={knight.isSalling ? cx("info", "sale", "cant") : cx("info", "sale", "can")}>
+                    <h4> {knight.isSalling ? "Is Salling" : "Can Transfer"} </h4>
+                  </div>
                   <div className={cx("info")}>
                     <h4> Owner: </h4>
                     <p> {ellipsisAddress(knight.owner)}</p>
