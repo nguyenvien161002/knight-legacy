@@ -7,7 +7,7 @@ import { DataKnight } from "../../../type"
 import { useMetamark, useWeb3 } from "../../../provider"
 import { useAppSelector, useAppDispatch } from "../../../redux/hook"
 import { getKnightsOfOwner } from "../../../redux/KnightsOwnerReducer"
-import { Loading } from "notiflix"
+import { Loading, Notify } from "notiflix"
 import knightApi from "../../../api/KnightApi"
 const cx = classNames.bind(style)
 
@@ -41,11 +41,11 @@ const ListKnight = ({ data }: Props) => {
         return knightApi.changeName({ knightID, newName })
       })
       .then((dataSave: any) => {
-        console.log(dataSave)
+        Notify.success("Change name knight success")
         dispatch(getKnightsOfOwner(wallet))
       })
       .catch((error: any) => {
-        console.log(error)
+        Notify.failure(`Change name knight failure!`)
         Loading.remove()
       })
   }
@@ -56,14 +56,13 @@ const ListKnight = ({ data }: Props) => {
       .send({ from: wallet, value: "1000000000000000" })
       .then((data: any) => {
         Loading.remove()
-        return knightApi.levelUp({ knightID })
       })
       .then((dataSave: any) => {
-        console.log(dataSave)
+        Notify.success("Levelup knight success")
         dispatch(getKnightsOfOwner(wallet))
       })
       .catch((error: any) => {
-        console.log(error)
+        Notify.failure(`Levelup knight failure!`)
         Loading.remove()
       })
   }
@@ -83,6 +82,9 @@ const ListKnight = ({ data }: Props) => {
                   <h3>{knight.knightID}</h3>
                 </div>
                 <div className={cx("card-info")}>
+                  <div className={knight.isSalling ? cx("info", "sale", "cant") : cx("info", "sale", "can")}>
+                    <h4> {knight.isSalling ? "Is Salling" : "Can Transfer"} </h4>
+                  </div>
                   <div className={cx("info")}>
                     <h4> Owner: </h4>
                     <p> {ellipsisAddress(knight.owner)}</p>

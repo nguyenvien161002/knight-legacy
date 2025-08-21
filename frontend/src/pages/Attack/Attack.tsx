@@ -39,7 +39,6 @@ function Attack() {
     if (modalAttackDom.length > 0) {
       modalAttackDom[0].classList.add("bg-transparent")
     }
-    console.log(modalAttackDom)
   }, [modalAttack])
 
   const handleShowModal = (isShow: boolean, selectedKnight: DataKnight) => {
@@ -61,7 +60,6 @@ function Attack() {
         .attack(myKnight?.knightID, selectedKnight?.knightID)
         .send({ from: wallet.value })
         .then((data: any) => {
-          console.log(data)
           setModalAttack(!modalAttack)
           if (data.events.battleResults.returnValues._result == true) {
             console.log("attack win")
@@ -70,42 +68,40 @@ function Attack() {
             console.log("attack lose")
             setResoultAttack(false)
           }
-          if (data.events.NewKnight) {
-            const params = {
-              name: data.events.NewKnight.returnValues.name,
-              dna: data.events.NewKnight.returnValues.dna,
-              knightID: data.events.NewKnight.returnValues.knightID,
-              level: data.events.NewKnight.returnValues.level,
-              attackTime: data.events.NewKnight.returnValues.readyTime,
-              sexTime: data.events.NewKnight.returnValues.sexTime,
-              owner: data.events.NewKnight.returnValues.owner.toLowerCase(),
-              tokenURI: data.events.NewKnight.returnValues.tokenURI,
-            }
-            knightApi
-              .storeKnight(params)
-              .then((response) => dispatch(getKnightsOfOwner(wallet.value)))
-              .catch((erorr: any) => console.log(erorr))
-          }
-
+          // if(data.events.NewKnight){
+          //     const params = {
+          //         name: data.events.NewKnight.returnValues.name,
+          //         dna:  data.events.NewKnight.returnValues.dna,
+          //         knightID: data.events.NewKnight.returnValues.knightID,
+          //         level: data.events.NewKnight.returnValues.level,
+          //         attackTime: data.events.NewKnight.returnValues.readyTime,
+          //         sexTime: data.events.NewKnight.returnValues.sexTime,
+          //         owner: (data.events.NewKnight.returnValues.owner).toLowerCase(),
+          //         tokenURI: data.events.NewKnight.returnValues.tokenURI
+          //     }
+          //     knightApi.storeKnight(params)
+          //     .then(response =>  dispatch(getKnightsOfOwner(wallet.value)))
+          //     .catch((erorr:any) => console.log(erorr))
+          // }
+          dispatch(getKnightsOfOwner(wallet.value))
           Loading.remove()
-          knightApi
-            .battleResults({
-              result: data.events.battleResults.returnValues._result,
-              idKnightWin: Number(data.events.battleResults.returnValues._knightWin),
-              idKnightLose: Number(data.events.battleResults.returnValues._knightLose),
-            })
-            .then((dataSave: any) => {
-              return knightApi.triggerCoolDown({
-                knightID: Number(data.events.TriggerCoolDown.returnValues._knightID),
-                timeOut: Number(data.events.TriggerCoolDown.returnValues._timeOut),
-              })
-            })
-            .then((dataUpdate: any) => {
-              console.log(dataUpdate)
-            })
-            .catch((error) => {
-              console.log(error)
-            })
+          // knightApi.battleResults({
+          //     result: data.events.battleResults.returnValues._result,
+          //     idKnightWin: Number(data.events.battleResults.returnValues._knightWin),
+          //     idKnightLose: Number(data.events.battleResults.returnValues._knightLose)
+          // })
+          // .then((dataSave: any) => {
+          //     return  knightApi.triggerCoolDown({
+          //         knightID: Number(data.events.TriggerCoolDown.returnValues._knightID),
+          //         timeOut: Number(data.events.TriggerCoolDown.returnValues._timeOut)
+          //     })
+          // })
+          // .then((dataUpdate: any) => {
+          //     console.log(dataUpdate);
+          // })
+          // .catch((error) => {
+          //     console.log(error);
+          // })
         })
         .catch((error: any) => {
           console.log(error)

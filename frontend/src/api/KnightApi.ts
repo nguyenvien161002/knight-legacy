@@ -82,6 +82,10 @@ const authorizationApi = {
     const url = `v1/api/knight/tranfer`
     return axiosClient.post(url, params)
   },
+  buyKnight: (params: any) => {
+    const url = `v1/api//knight/sale-knight`
+    return axiosClient.put(url, params)
+  },
 }
 
 export default authorizationApi

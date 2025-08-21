@@ -68,12 +68,13 @@ function Wedding() {
           setModalWedding(!modalWedding)
           if (data.events.RequestMarry.returnValues) {
             const params = {
-              idKnightRequest: data.events.RequestMarry.returnValues._knightFatherID,
-              idKnightResponse: data.events.RequestMarry.returnValues._knightMotherID,
+              idKnightRequest: data.events.RequestMarry.returnValues._IDknightRequest,
+              idKnightResponse: data.events.RequestMarry.returnValues._IDknightResponse,
               ownerResponse: data.events.RequestMarry.returnValues._to,
               ownerRequest: data.events.RequestMarry.returnValues._from,
               amountGift: data.events.RequestMarry.returnValues.amountGift,
             }
+
             knightApi.storeRequestMarry(params)
             Notify.success("Send data success")
             setAmountGift("")

@@ -8,6 +8,7 @@
     border-radius: 20px;
     background-color: #252041;
     margin-bottom: 15px;
+    box-shadow: rgb(0 0 0 / 30%) 0px 5px 15px 0px;
     .card-image {
       text-align: center;
       height: 350px;
@@ -87,6 +88,18 @@
     p {
       font-size: 1.3rem;
     }
+  }
+  .info.sale {
+    padding: 4px;
+    justify-content: center;
+    margin-bottom: 8px;
+    border-radius: 20px;
+  }
+  .info.sale.can {
+    background-color: #40e495;
+  }
+  .info.sale.cant {
+    background-color: #e85a19;
   }
 }
 .time-down {

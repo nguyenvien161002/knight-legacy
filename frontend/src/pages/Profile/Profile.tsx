@@ -10,7 +10,7 @@ import classNames from "classnames/bind"
 import ListKnight from "../../components/reuse/ListKnight/ListKnight"
 import ButtonConnect from "../../components/reuse/ButtonConnect/ButtonConnect"
 import { InforTranferKnight } from "../../type"
-import { Loading } from "notiflix"
+import { Loading, Notify } from "notiflix"
 import knightApi from "../../api/KnightApi"
 import { getKnightsOfOwner } from "../../redux/KnightsOwnerReducer"
 const cx = classNames.bind(style)
@@ -105,14 +105,13 @@ function Profile() {
       .send({ from: wallet.value })
       .then((data: any) => {
         Loading.remove()
-        return knightApi.tranfer({ knightID: inforTranfer.knightID, newOwner: inforTranfer.receiver.trim() })
-      })
-      .then((dataSave: any) => {
+        Notify.success(`Transfer knight ${inforTranfer.knightID} successfully`)
         dispatch(getKnightsOfOwner(wallet.value))
-        console.log(dataSave)
       })
       .catch((error: any) => {
         Loading.remove()
+        Notify.success(`Transfer knight ${inforTranfer.knightID} failure`)
+        Notify.warning(`Error:  ${error.message} `)
       })
   }
   const handleApprove = (e: any) => {
@@ -123,14 +122,15 @@ function Profile() {
       .send({ from: wallet.value })
       .then((data: any) => {
         Loading.remove()
-        // return knightApi.tranfer({knightID: inforTranfer.knightID, newOwner: inforTranfer.receiver.trim()});
+        Notify.success(`Approved knight ${inforTranfer.knightID} successfully`)
       })
-      .then((dataSave: any) => console.log(dataSave))
       .catch((error: any) => {
         Loading.remove()
+        Notify.success(`Approved knight ${inforTranfer.knightID} failure`)
+        Notify.warning(`Error:  ${error.message} `)
       })
   }
-  console.log(inforTranfer)
+
   return (
     <div className={cx("profile")}>
       <div className={cx("container")}>
